@@ -1,0 +1,9 @@
+# Site settings
+title: Shoumik Palkar
+tag_text: Shoumik Palkar
+description: I am a first year Computer Science graduate student at MIT.
+
+# Build settings
+markdown: kramdown
+
+exclude: ["README.md"]
