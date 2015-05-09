@@ -8,8 +8,8 @@ layout: default
   </div>
 </div>
 
-{% include text/intro.md %}
-{% include text/research.md %}
+{% include solo/text/intro.md %}
+{% include solo/text/research.md %}
 
 ### Contact
 
