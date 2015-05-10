@@ -1,3 +1,4 @@
-I recently graduated from UC Berkeley with a degree
+I recently finished my undergrad at UC Berkeley with a degree
 in Electrical Engineering and Computer Science. In September 2015, I will begin
-pursuing a Ph.D. at the Massachusetts Institute of Technology.
+pursuing a Ph.D. at the Massachusetts Institute of Technology, supported by the
+Jacobs Presidential Fellowship.

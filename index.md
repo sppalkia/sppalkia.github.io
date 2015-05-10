@@ -13,9 +13,9 @@ layout: default
 
 ### Contact
 
-* Email: [first name] @ mit [dot] edu
-* Twitter: @sppalkia
-* GitHub: sppalkia
+* Email: [first name] at mit [dot] edu
+* Twitter: [@sppalkia](https://www.twitter.com/sppalkia)
+* GitHub: [sppalkia](https://github.com/sppalkia)
 
 
 ###### Credits
