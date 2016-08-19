@@ -13,7 +13,7 @@ layout: default
 
 ### Contact
 
-* Email: [first name] [at] cs [dot] stanford [dot] edu
+* Email: shoumik [@] cs [dot] stanford [dot] edu
 * Twitter: [@sppalkia](https://www.twitter.com/sppalkia)
 * GitHub: [sppalkia](https://github.com/sppalkia)
 
