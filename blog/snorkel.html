@@ -7,8 +7,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 	<meta name="generator" content="Jekyll">
 
-	<title>This is the third test post.</title>
-  <meta name="description" content="This is the third test post.">
+	<title>Creating Training Data with Snorkel</title>
+  <meta name="description" content="The Stanford DAWN blog.">
 
 	<!-- CSS & fonts -->
 	<link rel="stylesheet" href="/blog/css/main.css">
@@ -44,11 +44,11 @@
 	  
 	    
 	  
-	    
-	  
     
     <!-- Nav links -->
-	  
+	  <a>Blog</a>
+
+
 
 	</div>
   
@@ -95,11 +95,11 @@
 	    
 	      
 	    
-	      
-	    
       
       <!-- Nav links -->
-	    
+	    <a>Blog</a>
+
+
 
     </span>
   </div>
@@ -116,13 +116,16 @@
 		<main>
 
 			<article id="post-page">
-	<h2>Test Post 3</h2>		
-	<time datetime="2017-02-11T00:00:00-05:00" class="by-line">11 Feb 2017</time>
+	<h2>Creating Training Data with Snorkel</h2>		
+    <i><h7>by Alex Ratner and Chris Ré</h7></i>		
+	<time datetime="2017-02-02T00:00:00-05:00" class="by-line">02 Feb 2017</time>
 	<div class="content">
 
-		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate est optio ut impedit architecto iusto tempore rem, voluptates sed magni nisi corrupti praesentium voluptatum harum expedita temporibus ipsam, odit ad distinctio! Labore cupiditate distinctio facere earum, iste! Reiciendis possimus voluptatum explicabo corporis ab. Ex adipisci laudantium mollitia vel optio deserunt blanditiis cum dolore beatae facilis molestias ut a doloribus recusandae delectus, repudiandae, rerum quo eaque quaerat enim dolores perspiciatis voluptatum odio accusamus! Doloribus fuga provident, magni eaque consequatur quia incidunt similique. Nostrum animi facere mollitia, corrupti vitae, itaque maiores consequatur, explicabo, sapiente molestiae consequuntur! Aliquam hic dolorum atque dolorem repudiandae nostrum optio praesentium quisquam vero. Nostrum illum modi aut, ratione qui! Quas laudantium, soluta asperiores minima molestiae similique consequatur ut.</p>
+		<p>Snorkel is a system for rapidly creating, modeling, and managing training data, currently focused on accelerating the development of structured or “dark” data extraction applications for domains in which large labeled training sets are not available or easy to obtain.</p>
 
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda ad tenetur, numquam aliquid excepturi fuga. Pariatur numquam rem possimus, optio voluptate aspernatur ex, ipsum tenetur earum molestiae nulla suscipit sequi labore fugit repudiandae natus? Nam vel rem, rerum maxime harum. Molestias suscipit quaerat molestiae dolores fuga earum modi, distinctio repellat, laborum commodi quibusdam ex dolore, eius maiores architecto necessitatibus. Repellendus a vitae, est nesciunt. Aspernatur fugiat labore cumque, optio, magni, aperiam ut totam error eligendi iure culpa illum dolorum quam?</p>
+<p>Today’s state-of-the-art machine learning models require massive labeled training sets–which usually do not exist for real-world applications. Instead, Snorkel is based around the new data programming paradigm, in which the developer focuses on writing a set of labeling functions, which are just scripts that programmatically label data. The resulting labels are noisy, but Snorkel automatically models this process—learning, essentially, which labeling functions are more accurate than others—and then uses this to train an end model (for example, a deep neural network in TensorFlow).</p>
+
+<p>Surprisingly, by modeling a noisy training set creation process in this way, we can take potentially low-quality labeling functions from the user, and use these to train high-quality end models. We see Snorkel as providing a general framework for many weak supervision techniques, and as defining a new programming model for weakly-supervised machine learning systems.</p>
 
 		
 	</div>

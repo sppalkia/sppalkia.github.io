@@ -265,6 +265,8 @@ blockquote {
   #nav-links {
     display: none; } }
 #nav-links a {
+  line-height: 1em;
+  font-size: 2em;
   padding-left: 10px;
   color: #333333;
   font-weight: 300; }
@@ -380,7 +382,7 @@ blockquote {
   width: 5rem;
   height: 1px;
   margin: 23px auto;
-  background-color: #e6e6e6; }
+  background-color: #820000; }
 
 .by-line {
   display: block;
@@ -410,12 +412,19 @@ img {
   -ms-border-radius: 4px;
   border-radius: 4px; }
 
+pre {
+  padding: 8px 15px;
+  background: #f7f7f7;
+  border-radius: 5px;
+  border: 1px solid #e5e5e5;
+  overflow-x: auto; }
+
 img[title="Monochrome"] {
   box-shadow: 0 2px 6px #ddd; }
 
 code {
-  color: #8c8c8c;
-  background-color: white; }
+  color: #333;
+  background-color: #f7f7f7; }
 
 /* Set the vertical rhythm (and padding-left) for lists inside post content */
 .content ul, .content ol {
