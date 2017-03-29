@@ -2,6 +2,7 @@
  * Monochrome is a simple, responsive blog theme built for Jekyll.
  */
 /*- Base reset -*/
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro");
 * {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -30,7 +31,7 @@ body {
 
 /*- Link -*/
 a {
-  color: #333333;
+  color: #820000;
   text-decoration: none;
   font-weight: 700; }
   a:hover, a:focus {
@@ -88,9 +89,9 @@ a {
 
 /*- Typography -*/
 body {
-  font-family: "Roboto", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 350;
   font-size: 16px;
   color: #333; }
 
@@ -106,10 +107,11 @@ p, ul, ol {
 h1 {
   font-size: 2.25em;
   /* 36px/16px */
-  line-height: 1.3333em;
+  line-height: 1.5em;
   /* 48px/36px */
   padding: 0.33335em 0;
-  /* 12px/36px * 2 (Use padding instead of margin to maintain proximity with paragraph) */ }
+  /* 12px/36px * 2 (Use padding instead of margin to maintain proximity with paragraph) */
+  color: #820000; }
 
 h2 {
   font-size: 1.5em;
@@ -117,15 +119,17 @@ h2 {
   line-height: 1em;
   /* 24px/24px */
   padding: 1em 0 0 0;
-  /* 12px/24px * 2, only top (Use padding instead of margin to maintain proximity with paragwithph) */ }
+  /* 12px/24px * 2, only top (Use padding instead of margin to maintain proximity with paragwithph) */
+  color: #820000; }
 
 h3, h4, h5, h6 {
   font-size: 1.125em;
   /* 18px/16px */
-  line-height: 1.3334em;
+  line-height: 1.5em;
   /* 24px/18px */
   padding: 0.66667em 0;
-  /* 12px/18px * 2 (Use padding instead of margin to maintain proximity with paragraph) */ }
+  /* 12px/18px * 2 (Use padding instead of margin to maintain proximity with paragraph) */
+  color: #820000; }
 
 blockquote {
   font-style: italic;
@@ -147,9 +151,9 @@ blockquote {
   p, ul, ol {
     font-size: 1em;
     /* 18px */
-    line-height: 1.3334em;
+    line-height: 1.5em;
     /* 24px/18px */
-    margin-bottom: 1.3334em;
+    margin-bottom: 1.5em;
     /* 24px/18px */ }
 
   h1 {
@@ -158,37 +162,47 @@ blockquote {
     line-height: 1em;
     /* 48px/48px */
     padding: 0.25em 0;
-    /* 12px/48px * 2 (Use padding instead of margin to maintain proximity with paragraph) */ }
+    /* 12px/48px * 2 (Use padding instead of margin to maintain proximity with paragraph) */
+    color: #820000; }
 
   h2 {
     font-size: 2em;
     /* 36px/18px */
-    line-height: 1.3334em;
+    line-height: 1.5em;
     /* 48px/36px */
     padding: 0.66667em 0 0 0;
-    /* 12px/36px * 2, pnly top (Use padding instead of margin to maintain proximity with paragraph) */ }
+    /* 12px/36px * 2, pnly top (Use padding instead of margin to maintain proximity with paragraph) */
+    color: #820000; }
+
+  #post-page h2:after {
+    display: block;
+    content: '';
+    height: 1px;
+    margin: 5px auto;
+    background-color: #820000; }
 
   h3, h4, h5, h6 {
-    font-size: 1.3334em;
+    font-size: 1.5em;
     /* 24px/18px */
     line-height: 1em;
     /* 24px/24px */
     padding: 0.5em 0;
-    /* 12px/24px * 2 (Use padding instead of margin to maintain proximity with paragraph) */ }
+    /* 12px/24px * 2 (Use padding instead of margin to maintain proximity with paragraph) */
+    color: #820000; }
 
   blockquote {
     font-style: italic;
-    margin: 1.3334em;
+    margin: 1.5em;
     /* 24px/18px */
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     -ms-border-radius: 4px;
     border-radius: 4px;
     background-color: #f2f2f2;
-    padding: 0 1.33334em;
+    padding: 0 1.5em;
     /* 24px/18px */ }
     blockquote p, blockquote ul, blockquote ol {
-      padding: 1.33334em 0;
+      padding: 1.5em 0;
       /* 24px/18px */ } }
 /* -- General Layout -- */
 /* Navigation */
@@ -366,6 +380,10 @@ blockquote {
       color: #820000;
       font-weight: 300; }
 
+#header #dawn {
+  color: #333;
+  font-weight: 800; }
+
 /* Posts */
 #posts li {
   list-style-type: none; }
@@ -374,7 +392,7 @@ blockquote {
   margin-bottom: 1.5em; }
   @media (min-width: 940px) {
     #post-page {
-      margin-bottom: 1.3334em; } }
+      margin-bottom: 1.5em; } }
 
 .post + .post:before {
   display: block;
@@ -396,9 +414,9 @@ blockquote {
     .by-line {
       display: block;
       color: #737373;
-      line-height: 1.3334em;
+      line-height: 1.5em;
       /* 24px/18px */
-      margin-bottom: 1.3334em;
+      margin-bottom: 1.5em;
       /* 24px/18px */
       font-weight: 200; } }
 
@@ -433,7 +451,7 @@ code {
   padding-left: 1.5em; }
   @media (min-width: 940px) {
     .content ul, .content ol {
-      line-height: 1.33334em;
+      line-height: 1.5em;
       /* 24px/18px */ } }
 
 /* Pages */
