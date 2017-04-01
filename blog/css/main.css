@@ -2,7 +2,6 @@
  * Monochrome is a simple, responsive blog theme built for Jekyll.
  */
 /*- Base reset -*/
-@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro");
 * {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -17,12 +16,12 @@ html, body, h1, h2, h3, h4, h5, h6, p, ul, ol, li, img {
 /*- Base settings -*/
 html {
   background-color: #FFFFFF;
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.5;
   color: #333333; }
   @media (min-width: 940px) {
     html {
-      font-size: 18px; } }
+      font-size: 14px; } }
 
 body {
   max-width: 1000px;
@@ -32,10 +31,10 @@ body {
 /*- Link -*/
 a {
   color: #820000;
-  text-decoration: none;
-  font-weight: 700; }
+  text-decoration: none; }
   a:hover, a:focus {
-    color: #262626; }
+    color: #262626;
+    text-decoration: underline; }
 
 /* Common classes */
 .f-right {
@@ -89,11 +88,12 @@ a {
 
 /*- Typography -*/
 body {
-  font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  font-family: "Helvetica", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   font-style: normal;
   font-weight: 350;
-  font-size: 16px;
-  color: #333; }
+  font-size: 14px;
+  color: #333;
+  max-width: 40em; }
 
 /*- Typography for medium and small screen, based on 16px font-size -*/
 p, ul, ol {
@@ -105,7 +105,7 @@ p, ul, ol {
   /* 24px/16px */ }
 
 h1 {
-  font-size: 2.25em;
+  font-size: 1.5em;
   /* 36px/16px */
   line-height: 1.5em;
   /* 48px/36px */
@@ -114,13 +114,16 @@ h1 {
   color: #820000; }
 
 h2 {
-  font-size: 1.5em;
+  font-size: 1.25em;
   /* 24px/16px */
   line-height: 1em;
   /* 24px/24px */
   padding: 1em 0 0 0;
   /* 12px/24px * 2, only top (Use padding instead of margin to maintain proximity with paragwithph) */
   color: #820000; }
+  h2:hover, h2:focus {
+    color: #262626;
+    text-decoration: underline; }
 
 h3, h4, h5, h6 {
   font-size: 1.125em;
@@ -157,7 +160,7 @@ blockquote {
     /* 24px/18px */ }
 
   h1 {
-    font-size: 2.6667em;
+    font-size: 1.5em;
     /* 48px/18px */
     line-height: 1em;
     /* 48px/48px */
@@ -166,13 +169,16 @@ blockquote {
     color: #820000; }
 
   h2 {
-    font-size: 2em;
+    font-size: 1.25em;
     /* 36px/18px */
     line-height: 1.5em;
     /* 48px/36px */
     padding: 0.66667em 0 0 0;
     /* 12px/36px * 2, pnly top (Use padding instead of margin to maintain proximity with paragraph) */
     color: #820000; }
+    h2:hover, h2:focus {
+      color: #262626;
+      text-decoration: underline; }
 
   #post-page h2:after {
     display: block;
@@ -182,7 +188,7 @@ blockquote {
     background-color: #820000; }
 
   h3, h4, h5, h6 {
-    font-size: 1.5em;
+    font-size: 1.125em;
     /* 24px/18px */
     line-height: 1em;
     /* 24px/24px */
@@ -291,7 +297,7 @@ blockquote {
   content: '';
   width: 5rem;
   height: 1px;
-  margin: 23px auto;
+  margin: 5px auto;
   background-color: #333333; }
 
 /* Icon menu */
@@ -399,7 +405,7 @@ blockquote {
   content: '';
   width: 5rem;
   height: 1px;
-  margin: 23px auto;
+  margin: 5px auto;
   background-color: #820000; }
 
 .by-line {
@@ -441,6 +447,7 @@ img[title="Monochrome"] {
   box-shadow: 0 2px 6px #ddd; }
 
 code {
+  font-size: 12px;
   color: #333;
   background-color: #f7f7f7; }
 
