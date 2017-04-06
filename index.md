@@ -16,10 +16,3 @@ layout: default
 * Email: shoumik [at] cs [dot] stanford [dot] edu
 * Twitter: [@sppalkia](https://www.twitter.com/sppalkia)
 * GitHub: [sppalkia](https://github.com/sppalkia)
-
-
-###### Credits
-
-This page is generated using [Jekyll](http://jekyllrb.com/), and is based on the
-[Solo](http://chibicode.github.io/solo) theme by Shu Uesugi (licensed under the
-[MIT License](http://chibicode.mit-license.org/)).
