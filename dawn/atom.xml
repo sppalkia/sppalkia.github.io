@@ -4,7 +4,7 @@
  <title>Stanford DAWN</title>
  <link href="http://dawn.cs.stanford.edu/dawn/atom.xml" rel="self"/>
  <link href="http://dawn.cs.stanford.edu/dawn/"/>
- <updated>2017-05-16T23:31:27-07:00</updated>
+ <updated>2017-05-17T14:35:05-07:00</updated>
  <id>http://dawn.cs.stanford.edu</id>
  <author>
    <name>Stanford DAWN</name>
@@ -174,7 +174,7 @@ This is because during inference one needs to consider all possible joint assign
 
 &lt;h2 id=&quot;labeled-training-data-the-new-new-oil&quot;&gt;Labeled Training Data: The &lt;em&gt;New&lt;/em&gt; New Oil&lt;/h2&gt;
 
-&lt;p&gt;&lt;img src=&quot;/dawn/dawn/assets/img/2017-05-08-snorkel/new-new-banner.png&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/dawn/assets/img/2017-05-08-snorkel/new-new-banner.png&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Today’s state-of-the-art machine learning models are both more powerful and easier to spin up than ever before.
 Whereas practitioners used to spend the bulk of their time carefully engineering &lt;em&gt;features&lt;/em&gt; for their models, we can now feed in raw data - images, text, genomic sequences, etc. - to systems that &lt;em&gt;learn&lt;/em&gt; their own features.
