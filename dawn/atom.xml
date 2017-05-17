@@ -1,0 +1,830 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+ <title>Stanford DAWN</title>
+ <link href="http://dawn.cs.stanford.edu/dawn/atom.xml" rel="self"/>
+ <link href="http://dawn.cs.stanford.edu/dawn/"/>
+ <updated>2017-05-16T23:31:27-07:00</updated>
+ <id>http://dawn.cs.stanford.edu</id>
+ <author>
+   <name>Stanford DAWN</name>
+   <email>dawn-project@lists.stanford.edu</email>
+ </author>
+
+ 
+ <entry>
+   <title>HoloClean - Weakly Supervised Data Repairing</title>
+   <link href="http://dawn.cs.stanford.edu/dawn/2017/05/12/holoclean/"/>
+   <updated>2017-05-12T00:00:00-07:00</updated>
+   <id>http://dawn.cs.stanford.edu/2017/05/12/holoclean</id>
+   <content type="html">&lt;blockquote&gt;
+  &lt;p&gt;Data cleaning and repairing account for about 60% of the work of data scientists.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Noisy and erroneous data is a major bottleneck in analytics. Data cleaning and repairing account for about &lt;a href=&quot;https://www.forbes.com/sites/gilpress/2016/03/23/data-preparation-most-time-consuming-least-enjoyable-data-science-task-survey-says/#259a5d256f63&quot;&gt;60% of the work of data scientists&lt;/a&gt;. 
+To address this bottleneck, we recently introduced &lt;a href=&quot;https://arxiv.org/abs/1702.00820&quot;&gt;HoloClean&lt;/a&gt;, a semi-automated data repairing framework that relies on statistical learning and inference to repair errors in structured data. 
+In HoloClean, we build upon the paradigm of &lt;a href=&quot;http://hazyresearch.github.io/snorkel/blog/weak_supervision.html&quot;&gt;weak supervision&lt;/a&gt; and demonstrate how to leverage diverse signals, including user-defined heuristic rules (such as &lt;a href=&quot;http://dl.acm.org/citation.cfm?id=2511233&quot;&gt;generalized data integrity constraints&lt;/a&gt;) and external dictionaries, to repair erroneous data.&lt;/p&gt;
+
+&lt;p&gt;HoloClean has three key properties:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;It is the first holistic data cleaning framework that combines a variety of heterogeneous signals, such as integrity constraints, external knowledge, and quantitative statistics, in a unified framework.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;It is the first data cleaning framework driven by probabilistic inference. Users only need to provide a dataset to be cleaned and describe high-level domain specific signals.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;It can scale to large real-world dirty datasets and perform automatic repairs that are two times more accurate than state-of-the-art methods.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;detecting-and-repairing-erroneous-data&quot;&gt;Detecting and Repairing Erroneous Data&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;HoloClean can fix diverse errors in structured datasets, ranging from conflicting and misspelled values to outliers and null entries.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;All too often, the data collected by companies, organizations, and researchers is filled with mistakes, errors, and incomplete values.
+This is referred to as &lt;em&gt;dirty data&lt;/em&gt;, and it can represent a formidable obstacle to downstream applications.
+Take for example a snippet from the &lt;a href=&quot;https://data.cityofchicago.org/Health-Human-Services/Food-Inspections/4ijn-s7e5/&quot;&gt;Food Inspections dataset&lt;/a&gt; published by the City of Chicago:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/dawn/assets/img/2017-05-12-holoclean/errors_chicago.jpg&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Errors in this dataset range from misspelled entries (e.g., “Chicago” is spelled “Cicago”) and conflicting Zip code values for the same address (e.g., “60608” versus “60609” for the same address in Chicago) to outlier values for key attributes (e.g., “Johnnyo’s” instead of “John Veliotis Sr.”).&lt;/p&gt;
+
+&lt;p&gt;In HoloClean, we focus on &lt;strong&gt;&lt;em&gt;structured datasets&lt;/em&gt;&lt;/strong&gt; such as the one shown above.
+Our goal is to identify and repair all cells whose initial, &lt;strong&gt;&lt;em&gt;observed value&lt;/em&gt;&lt;/strong&gt; is different from their &lt;strong&gt;&lt;em&gt;true value&lt;/em&gt;&lt;/strong&gt;, which is unknown.
+We term these &lt;strong&gt;&lt;em&gt;erroneous cells&lt;/em&gt;&lt;/strong&gt;. Given the above, data cleaning is separated into two tasks: (i) &lt;strong&gt;&lt;em&gt;error detection&lt;/em&gt;&lt;/strong&gt;, whose goal is to identify erroneous cells, and (ii) &lt;strong&gt;&lt;em&gt;data repairing&lt;/em&gt;&lt;/strong&gt;, whose goal is to infer the true value of detected erroneous cells.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Data cleaning is a statistical learning and inference problem.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;HoloClean casts data cleaning as a statistical learning and inference problem.
+Each cell of an input, dirty dataset is associated with a random variable.
+That random variable can either have a &lt;strong&gt;&lt;em&gt;fixed value&lt;/em&gt;&lt;/strong&gt; if the corresponding cell was not detected to be erroneous, or an &lt;strong&gt;&lt;em&gt;unknown value&lt;/em&gt;&lt;/strong&gt;, if the corresponding cell was detected to be erroneous.
+HoloClean uses random variables with fixed values as &lt;strong&gt;&lt;em&gt;training data&lt;/em&gt;&lt;/strong&gt; to learn a probabilistic model for repairing erroneous cells, whose random variables have unknown values.&lt;/p&gt;
+
+&lt;h2 id=&quot;data-cleaning-via-weak-supervision&quot;&gt;Data Cleaning via Weak Supervision&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;In HoloClean, users only need to specify high-level assertions that capture their domain-expertise with respect to invariants that the input data needs to satisfy. No other supervision is required!&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;How can we train a probabilistic model for data cleaning efficiently?
+As with any other large-scale machine learning problem, users cannot afford to iterate over all cells in a dataset with millions of tuples to identify erroneous cells and suggest repairs.
+This is where &lt;a href=&quot;http://hazyresearch.github.io/snorkel/blog/weak_supervision.html&quot;&gt;weak supervision&lt;/a&gt; shines!&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;70%&quot; src=&quot;/dawn/assets/img/2017-05-12-holoclean/inputs.jpg&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;HoloClean unifies heterogeneous weak signals that provide evidence on the correct value of structured data to detect and repair errors.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;HoloClean leverages a variety of weak signals to address error detection and data repairing:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;In HoloClean, users can specify &lt;a href=&quot;https://www.cse.buffalo.edu/~chomicki/papers-ic05.pdf&quot;&gt;denial constraints&lt;/a&gt;, a general form of integrity constraints, to detect tuples that report conflicting information. For example, in the Food Inspections dataset, the functional dependency &lt;b&gt;City, State, Address → Zip&lt;/b&gt;, can be used to identify that the information provided by Tuple t1 is in conflict with the information of Tuples t2 and t3. Denial constraints are high-level first-order logic rules that capture the user’s domain-expertise. These rules can be specified by the user or even discovered &lt;a href=&quot;http://dl.acm.org/citation.cfm?id=2536262&quot;&gt;automatically&lt;/a&gt;.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Users also have the option to use &lt;a href=&quot;http://dl.acm.org/citation.cfm?id=1687674&quot;&gt;external datasets or dictionaries&lt;/a&gt; and specify high-level rules that match the data provided by a trusted external dataset to the input dataset to be cleaned.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;HoloClean uses state-of-the-art &lt;a href=&quot;http://dl.acm.org/citation.cfm?id=1281219&quot;&gt;outlier detection methods&lt;/a&gt; that leverage &lt;em&gt;quantitative statistics&lt;/em&gt; to find cells whose value does not obey overall distributional properties of the input data. Outlier detection is run automatically and requires no input by the user.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;All signals described above are used to automatically generate a probabilistic model for data cleaning:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Denial constrains introduce correlations over sets of random variables. For example, if the random variables for cells Address, City, and State in Tuples t1 and t2 have matching values then the random variables for t1.Zip and t2.Zip should take the same value.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;External data determine priors on the correct value of different cells. For example, the fact that address “3465 S Morgan St, Chicago, IL” is assigned to Zip Code “60608” in an external dataset provides evidence that the initially observed Zip Code of “60609” is wrong.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Finally, HoloClean uses the available labeled data (generated via the weak signals described above) to learn a series of quantitative statistics over the input data (e.g., co-occurrence statistics over pairs of attribute values). Quantitative statistics are used to form priors over the assignment of random variables that correspond to erroneous cells.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img width=&quot;100%&quot; src=&quot;/dawn/assets/img/2017-05-12-holoclean/holoclean.jpg&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Overall, HoloClean is a data cleaning framework that takes as input a dirty dataset, a collection of integrity constraints, and potentially a collection of external data and forms a probabilistic model for data cleaning.
+HoloClean builds upon &lt;a href=&quot;http://deepdive.stanford.edu/&quot;&gt;DeepDive&lt;/a&gt;, our in-house general-purpose inference engine, to execute learning and inference over its model. For each random variable HoloClean estimates its maximum a posteriori assignment as well as the marginal distribution over the values in its domain. The latter can be used to identify repairs with low confidence and solicit additional user-feedback in a principled manner.&lt;/p&gt;
+
+&lt;h3 id=&quot;holoclean-in-practice&quot;&gt;HoloClean in Practice&lt;/h3&gt;
+
+&lt;p&gt;In our &lt;a href=&quot;https://arxiv.org/abs/1702.00820&quot;&gt;paper&lt;/a&gt; we evaluate HoloClean over a variety of real-world datasets, including the Food Inspections dataset presented above. We compare HoloClean with various state-of-the-art data cleaning methods. All prior methods are designed to use each of the signals presented above in isolation. On the other hand, due to the flexibility and extensibility of probabilistic models, HoloClean can combine all signals in a unified framework.&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;70%&quot; src=&quot;/dawn/assets/img/2017-05-12-holoclean/f1_overview.jpg&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;In our experiments we find that HoloClean finds data repairs with an average precision of ~90%
+and an average recall of above 76% across a diverse array of datasets exhibiting different types of errors.
+This yields an average F1 improvement of more than 2x against state-of-the-art methods.&lt;/p&gt;
+
+&lt;h2 id=&quot;scaling-probabilistic-inference&quot;&gt;Scaling Probabilistic Inference&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Hard constraints (e.g., integrity constraints) lead to complex and non-scalable repairing models.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The main technical challenge in HoloClean is scaling inference over the probabilistic model used for data cleaning.
+It is well-known that inference in the presence of constraints is &lt;a href=&quot;https://en.wikipedia.org/wiki/Sharp-P-complete&quot;&gt;#P-complete&lt;/a&gt;.
+This is because during inference one needs to consider all possible joint assignments over sets of random variables that are correlated. For example, consider the dataset shown in the figure below:&lt;/p&gt;
+
+&lt;p&gt;&lt;img width=&quot;70%&quot; src=&quot;/dawn/assets/img/2017-05-12-holoclean/relax.jpg&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The user-specified integrity constraint shown in the Example introduces a correlation across the four random variables corresponding to the cells of Tuples t1 and t3. If we naively encode this correlation by converting the integrity constraint to a first-order logic constraint, we need to enumerate all possible assignments over these four random variables. It is easy to see that for complex constraints and data cleaning instances with millions of tuples and random variables with large domains this naive approach does not scale.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;HoloClean relaxes constraints over sets of data cells to simple features over individual data cells. This gives a scalable repairing model with independent random variables alone.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;To ensure scalability, HoloClean applies integrity constraints over the input dataset to identify tuples that provide conflicting information and uses integrity constraints to learn &lt;strong&gt;&lt;em&gt;features&lt;/em&gt;&lt;/strong&gt; over the random variables associated with the cells corresponding to these tuples. The final probabilistic model generated by HoloClean corresponds to a &lt;strong&gt;&lt;em&gt;voting model over independent random variables&lt;/em&gt;&lt;/strong&gt; that ensures the local consistency of the values assigned to different cells.&lt;/p&gt;
+
+&lt;p&gt;In our paper, we empirically find that when there is sufficient redundancy in observing the correct value of cells in a dataset, HoloClean’s approximate model obtains more accurate repairs and is more robust to misspecification of the domain of random variables in its probabilistic model.&lt;/p&gt;
+
+&lt;h2 id=&quot;next-steps&quot;&gt;Next Steps&lt;/h2&gt;
+
+&lt;p&gt;A few things we are excited about:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;We are actively exploring the connections between HoloClean’s relaxed model and other structured prediction tasks. Specifically, we are focusing on cases where globally consistent constraints can be replaced with locally consistent priors due to redundancy in the observed data. In fact, trading off constraints for features has been an &lt;a href=&quot;http://theory.stanford.edu/~tim/papers/statrec.pdf&quot;&gt;open area of study in the area of probabilistic inference over structured models&lt;/a&gt;.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;We are working on combining HoloClean with &lt;a href=&quot;http://hazyresearch.github.io/snorkel/&quot;&gt;Snorkel&lt;/a&gt;, our new data-programming engine, to provide users with an interactive way of specifying and revising weak signals for constructing data cleaning models.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;We are working on a code release for HoloClean; so stay tuned!&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Snorkel and The Dawn of Weakly Supervised Machine Learning</title>
+   <link href="http://dawn.cs.stanford.edu/dawn/2017/05/08/snorkel/"/>
+   <updated>2017-05-08T00:00:00-07:00</updated>
+   <id>http://dawn.cs.stanford.edu/2017/05/08/snorkel</id>
+   <content type="html">&lt;p&gt;In this post, we’ll discuss our approaches to weakly supervising complex machine learning models in the age of big data. Learn more about Snorkel, our system for rapidly creating training sets with weak supervision, at &lt;a href=&quot;http://snorkel.stanford.edu&quot;&gt;snorkel.stanford.edu&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;labeled-training-data-the-new-new-oil&quot;&gt;Labeled Training Data: The &lt;em&gt;New&lt;/em&gt; New Oil&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/dawn/dawn/assets/img/2017-05-08-snorkel/new-new-banner.png&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Today’s state-of-the-art machine learning models are both more powerful and easier to spin up than ever before.
+Whereas practitioners used to spend the bulk of their time carefully engineering &lt;em&gt;features&lt;/em&gt; for their models, we can now feed in raw data - images, text, genomic sequences, etc. - to systems that &lt;em&gt;learn&lt;/em&gt; their own features.
+These powerful models, like deep neural networks, produce state-of-the-art results on many tasks.
+This new power and flexibility has sparked excitement about machine learning in fields ranging from medicine to business to law.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;There is a hidden cost to this success, however: these models require &lt;em&gt;massive&lt;/em&gt; labeled training sets.&lt;/strong&gt;
+And while machine learning researchers can use carefully manicured training sets to benchmark their new models, these labeled training sets do not exist for most real world tasks.
+Creating sufficiently large labeled training datasets is extremely expensive and slow in practice.
+This is exacerbated when &lt;strong&gt;domain expertise is required&lt;/strong&gt; to label data, such as a radiologist labeling MRI images as containing malignant tumors or not.
+In addition, &lt;strong&gt;hand-labeled training data is not adaptable or flexible&lt;/strong&gt;, and thus entirely unsuitable for learning tasks which change over time.&lt;/p&gt;
+
+&lt;h2 id=&quot;weak-supervision&quot;&gt;Weak Supervision&lt;/h2&gt;
+&lt;p&gt;We’re quite excited about a set of approaches broadly termed &lt;em&gt;weak supervision&lt;/em&gt; to address the bottleneck described above.
+The basic idea is to &lt;strong&gt;allow users to provide supervision at a higher level&lt;/strong&gt; than case-by-case labeling, and then to &lt;strong&gt;use various statistical techniques to deal with the noisier labels&lt;/strong&gt; that we get.
+Working with domain experts, we found that this type of supervision is easier and faster to provide.
+And surprisingly, &lt;strong&gt;by getting large volumes of lower-quality supervision in this way, we can train higher-quality models at a fraction of the time and cost.&lt;/strong&gt;
+We see weak supervision-based systems as one of the most exciting directions in terms of how users will train, deploy, and interact with machine learning systems.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/dawn/assets/img/2017-05-08-snorkel/dp_workflow.png&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;One of the main techniques that we are currently developing in this direction is called &lt;strong&gt;&lt;em&gt;data programming&lt;/em&gt;&lt;/strong&gt; (see our blog post about it &lt;a href=&quot;http://hazyresearch.github.io/snorkel/blog/weak_supervision.html&quot;&gt;here&lt;/a&gt;, or the NIPS 2016 paper &lt;a href=&quot;https://papers.nips.cc/paper/6523-data-programming-creating-large-training-sets-quickly&quot;&gt;here&lt;/a&gt;).
+In the data programming paradigm, users focus on &lt;strong&gt;writing a set of &lt;em&gt;labeling functions&lt;/em&gt;&lt;/strong&gt;, which are just small functions that programmatically label data.
+The labels that they produce are noisy and could conflict with each other.
+However, &lt;strong&gt;we can model this noise&lt;/strong&gt; by learning a generative model of the labeling process, effectively synthesizing the labels created by the labeling functions.
+We can then use this new label set to train a &lt;em&gt;noise-aware&lt;/em&gt; end discriminative model (such as a neural network in TensorFlow) with higher accuracy.
+&lt;strong&gt;This framework allow users to easily “program” machine learning models with high-level functions&lt;/strong&gt;, and leverage whatever code, domain heuristics, or data resources they have at hand.
+And, since the supervision is provided as functions, it allows us to &lt;em&gt;scale with the amount of unlabeled data&lt;/em&gt;!&lt;/p&gt;
+
+&lt;h2 id=&quot;snorkel&quot;&gt;Snorkel&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;/dawn/assets/img/2017-05-08-snorkel/snorkel-1.png&quot; align=&quot;middle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;http://snorkel.stanford.edu&quot;&gt;Snorkel&lt;/a&gt; is a system built around the data programming paradigm for rapidly creating, modeling, and managing training data.&lt;/strong&gt;
+Snorkel is currently focused on accelerating the development of structured or “dark” data extraction applications for domains in which large labeled training sets are not available or easy to obtain.
+For example, Snorkel is being currently used on text extraction applications &lt;strong&gt;on medical records at the Deparment of Veterans Affairs&lt;/strong&gt;, to mine scientific literature for &lt;strong&gt;adverse drug reactions in collaboration with the Federal Drug Administration&lt;/strong&gt;, and to comb through everything from &lt;strong&gt;surgical reports to after-action combat reports&lt;/strong&gt; for valuable structured data.&lt;/p&gt;
+
+&lt;h2 id=&quot;and-beyond&quot;&gt;…And Beyond&lt;/h2&gt;
+&lt;p&gt;We’ve been working hard on next steps for data programming, Snorkel, and other weak supervision techniques, some of which we’ve already posted about:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://hazyresearch.github.io/snorkel/blog/structure_learning.html&quot;&gt;Structure learning&lt;/a&gt;: How can we detect correlations and other statistical dependencies among labeling functions? Modeling these dependencies are important because a misspecified generative model can lead to misestimating the labeling functions’ accuracies. We’ve &lt;a href=&quot;https://arxiv.org/abs/1703.00854&quot;&gt;proposed a method&lt;/a&gt; that can quickly identify dependencies without any ground truth data.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;http://hazyresearch.github.io/snorkel/blog/socratic_learning.html&quot;&gt;Socratic learning&lt;/a&gt;: How can we more effectively model and debug the user-written labeling functions in data programming?  We’re working on &lt;a href=&quot;https://arxiv.org/abs/1610.08123&quot;&gt;a method&lt;/a&gt; to use differences between the generative and discriminative models to help do this.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://hazyresearch.github.io/snorkel/blog/fonduer.html&quot;&gt;Semi-structured data extraction&lt;/a&gt;: How can we handle extracting structured data from data that has &lt;em&gt;some&lt;/em&gt; structure such as tables embedded in PDFs and webpages?  We’ve been working on a system called &lt;a href=&quot;https://arxiv.org/abs/1703.05028&quot;&gt;Fonduer&lt;/a&gt; to make this fast and easy in Snorkel!&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://hazyresearch.github.io/snorkel/blog/babble_labble.html&quot;&gt;Learning from natural language supervision&lt;/a&gt;: Can we use natural language as a form of weak supervision, parsing the semantics of natural language statements and then using these as labeling functions?  We’ve done some exciting preliminary work here!&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>A retrospective on NSDI 2017</title>
+   <link href="http://dawn.cs.stanford.edu/dawn/2017/04/28/nsdi/"/>
+   <updated>2017-04-28T00:00:00-07:00</updated>
+   <id>http://dawn.cs.stanford.edu/2017/04/28/nsdi</id>
+   <content type="html">&lt;p&gt;A group of us at DAWN went to &lt;a href=&quot;https://www.usenix.org/conference/nsdi17&quot;&gt;NSDI&lt;/a&gt;
+last month. The program was quite diverse, spanning a wide variety
+of sub-areas in the networking and distributed systems space.&lt;/p&gt;
+
+&lt;p&gt;We were excited to see some trends in the research presented that meshed well with
+&lt;a href=&quot;http://dawn.cs.stanford.edu/blog/dawn-intro.html&quot;&gt;the DAWN vision&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;greater-emphasis-on-systems-for-machine-learning&quot;&gt;Greater emphasis on systems for machine learning&lt;/h3&gt;
+&lt;p&gt;The machine learning community has spent a
+lot of time optimizing different machine learning algorithms to achieve better
+accuracies in different settings. Despite these advances, deploying models in practice
+remains extremely hard. In particular,
+tasks like hyperparameter tuning, efficient model serving and updating of models
+in an online setting remain challenging, especially for users who are
+not machine learning experts.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.usenix.org/conference/nsdi17/technical-sessions/presentation/crankshaw&quot;&gt;Clipper&lt;/a&gt;
+is a work from UC Berkeley that tries to make serving machine learning
+predictions faster and easier. By batching multiple concurrent queries, Clipper
+can better utilize physical compute resources (for example, blocking is fairly
+ineffective for small compute problems, but becomes far more effective
+for medium to large-sized problems), thus improving the net throughput
+of the system. Picking an arbitrarily high batch size can lead to an unacceptably
+high latency however, particularly for real-time applications like Netflix and Amazon;
+Clipper thus accepts a latency SLO that it adheres to, while still trying to maximize
+throughput.&lt;/p&gt;
+
+&lt;p&gt;There were a couple of other papers in this space like
+&lt;a href=&quot;https://www.usenix.org/conference/nsdi17/technical-sessions/presentation/hsieh&quot;&gt;Gaia&lt;/a&gt;, which shows that
+when training models, parameter updates can be sent over the network infrequently; and
+&lt;a href=&quot;https://www.usenix.org/conference/nsdi17/technical-sessions/presentation/xiao&quot;&gt;Tux2&lt;/a&gt;, which
+improves support for machine learning algorithms on graphs.&lt;/p&gt;
+
+&lt;h3 id=&quot;video-as-a-source-of-new-challenges-in-data-analytics&quot;&gt;Video as a source of new challenges in data analytics&lt;/h3&gt;
+&lt;p&gt;Recent advances in computer vision have opened up an exciting new domain for machine
+learning: video processing. With as many
+as 500 hours of YouTube content uploaded every minute, it is increasingly becoming
+necessary for machine learning algorithms to be able to process video content
+efficiently. Unfortunately, processing these video streams at scale in real time
+with state-of-the-art computer vision techniques is still too expensive.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.usenix.org/conference/nsdi17/technical-sessions/presentation/zhang&quot;&gt;VideoStorm&lt;/a&gt;
+is a system from MSR that tries to determine the best way to schedule video processing
+jobs on a cluster of machines. VideoStorm makes the observation that video analysis algorithms can be run
+with a number of parameters (image resolution, frame rate, window size) that affect
+accuracy and performance. It is able navigate the accuracy-performance tradeoff space to achieve
+high accuracy within a given computational budget.&lt;/p&gt;
+
+&lt;p&gt;ExCamera (which we describe in more detail later in this post) also looks at the general
+problem of video processing – in particular, it tries to make video encoding faster.&lt;/p&gt;
+
+&lt;p&gt;At DAWN, we strongly believe that effectively being able to run various analyses on
+video represents the next frontier of data analysis. In a recent arXiv submision, we
+describe &lt;a href=&quot;https://arxiv.org/pdf/1703.02529.pdf&quot;&gt;NoScope&lt;/a&gt;, a system that attempts
+to train cheap filters that produce the same output as much more expensive
+convolutional neural network approaches on certain binary classification problems.&lt;/p&gt;
+
+&lt;h3 id=&quot;use-of-accelerators--programmable-hardware-to-ease-performance-bottlenecks&quot;&gt;Use of accelerators &amp;amp; programmable hardware to ease performance bottlenecks&lt;/h3&gt;
+&lt;p&gt;With 40 GbE being deployed and
+100 GbE around the corner, packet processing on general-purpose CPUs is becoming increasingly difficult. 
+Unforutnately, the 
+trend toward faster networks and fewer cycles for packet processing runs counter to the 
+rising complexity of packet processing algorithms due to the growth of the cloud, 
+virtualization and increasing concerns about security. Specialized packet processing hardware 
+seems to be the only solution.&lt;/p&gt;
+
+&lt;p&gt;The first paper we saw in this area was
+&lt;a href=&quot;https://www.usenix.org/conference/nsdi17/technical-sessions/presentation/go&quot;&gt;APUNet&lt;/a&gt;, from authors at KAIST, which proposes the use 
+of a die-integrated GPU for packet processing. Packet processing with external GPUs is often 
+limited by data transfer over PCIe, and die-integrated GPUs avoid this cost. The paper shows 
+some good results, with speedups of up to 4x over optimized CPU implementations for functions 
+like intrusion detection and checksumming. The evaluation of the integrated GPU’s cost-effectiveness
+presented in the paper seems a bit questionable, however: the authors use AMD’s list prices for 
+components, which may be influenced by marketing and business factors rather than just 
+manufacturing cost. A better evaluation would have compared performance of CPU and GPU-based 
+systems in terms of throughput per unit die area and per watt.&lt;/p&gt;
+
+&lt;p&gt;The second paper related to this trend was
+&lt;a href=&quot;https://www.usenix.org/conference/nsdi17/technical-sessions/presentation/firestone&quot;&gt;VFP&lt;/a&gt;
+from Microsoft. As users of the Microsoft Azure 
+cloud demand more functionality (such as ACLs and fine-grained billing) from the network, packet 
+processing tasks are becoming more complex – as network link speeds continue to increase. Microsoft 
+has observed that most of the network functionality they require can be implemented at the host 
+level and does not require network-wide state, but an FPGA is still required per host to keep up with the traffic. 
+Maintaining a large team of digital circuit engineers to develop an FPGA-based platform must be 
+costly, and it remains to be seen whether commodity NICs will be able to catch up to Microsoft’s 
+needs.&lt;/p&gt;
+
+&lt;h3 id=&quot;advent-of-distributed-computation-frameworks-with-fine-grained-parallelism&quot;&gt;Advent of distributed computation frameworks with fine-grained parallelism&lt;/h3&gt;
+&lt;p&gt;Despite much work in the distributed
+systems community, systems to efficiently execute applications with fine-grained tasks do not exist today.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.usenix.org/conference/nsdi17/technical-sessions/presentation/fouladi&quot;&gt;ExCamera&lt;/a&gt;,
+a paper written by colleagues at Stanford, proposes a new video encoding algorithm
+that runs on top of &lt;a href=&quot;https://aws.amazon.com/lambda/&quot;&gt;Amazon Lambda&lt;/a&gt;. Conventionally, video codecs parallelize
+encoding by breaking up a large video into smaller chunks, and then encoding each
+of these chunks independently. This however forces a larger frame at the start of
+each chunk, and this adversely affects the size of the encoded video. Thus, the current
+naïve way of parallelizing an encoding task creates fairly large encoded videos.&lt;/p&gt;
+
+&lt;p&gt;ExCamera is able to do better by passing state from each chunk to the next to reduce the size
+of chunks’ initial frames; this process can be performed in parallel across all of the chunks.
+ExCamera is able to use 1000s of threads
+in the cloud, seeing speedups of 56x on a representative
+encoding task compared to the multi-threaded &lt;code class=&quot;highlighter-rouge&quot;&gt;vpxenc&lt;/code&gt;
+implementation.&lt;/p&gt;
+
+&lt;p&gt;While it focused primarily on video encoding, the techniques presented in this paper can be generalized to
+other computation-intensive tasks such as compilation, interactive machine learning
+and visualization.&lt;/p&gt;
+
+&lt;h3 id=&quot;desire-for-performance-without-compromising-on-programmability&quot;&gt;Desire for performance without compromising on programmability&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.usenix.org/conference/nsdi17/technical-sessions/presentation/ousterhout&quot;&gt;Flexplane&lt;/a&gt;
+is a system that allows software emulation of network algorithms at near-line rate.
+As opposed to running these algorithms completely in simulation, Flexplane
+keeps the end hosts unchanged and only emulates the parts of the computation that run on switches.
+This ensures that the nuances of hardware stacks and NICs are captured, while also
+making integrations with real applications like Spark easy, since the interfaces
+to applications are unchanged. Flexplane places an
+emphasis on ease of programmability, allowing users to quickly iterate on their
+ideas and experiments, but without compromising on performance. Flexplane communicates
+with the emulator (which resides on a stand-alone multicore machine) through “abstract
+packets” (at a high level, the original packet without the payload).&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.usenix.org/conference/nsdi17/technical-sessions/presentation/jamshed&quot;&gt;mOS&lt;/a&gt;
+(recipient of this year’s Best Paper Award) is a
+reusable network stack for middleboxes which monitors flow state.
+Middleboxes are network appliances which perform complex tasks on traffic
+flowing through them; common middleboxes include intrusion detection systems and accounting devices.
+Unfortunately, programming these middleboxes is very
+difficult; there is no API for performing standard tasks like detecting packet retransmissions,
+reconstructing TCP streams, and inspecting HTTP headers for malicious payloads.
+mOS provides such an API, taking care to cleanly separate the API from the application-specific
+logic of the middlebox. Developers can track network state for the client and server by listening
+for particular &lt;em&gt;events&lt;/em&gt; that occur in flows. To solve the
+scalability issue of maintaining a list of registered events for each connection, events are shared
+between sockets which look at similar classes of data.&lt;/p&gt;
+
+&lt;p&gt;Both Flexplane and mOS recognize the need for programmability to go hand-in-hand with performance –
+offering hard-to-use programming interfaces often makes good performance hard to achieve in
+practice. &lt;a href=&quot;http://weld.stanford.edu&quot;&gt;Weld&lt;/a&gt;, a system we’ve been working on at DAWN, tries to address
+similar challenges in the data analytics domain; even though this is a significantly different domain
+than packet processing, we believe the general idea of designing systems that offer performance without
+sacrificing on programmability is an important one to keep in mind.&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Implementing Weld in Rust</title>
+   <link href="http://dawn.cs.stanford.edu/dawn/2017/04/25/weld/"/>
+   <updated>2017-04-25T00:00:00-07:00</updated>
+   <id>http://dawn.cs.stanford.edu/2017/04/25/weld</id>
+   <content type="html">&lt;p&gt;&lt;a href=&quot;https://weld-project.github.io&quot;&gt;Weld&lt;/a&gt; is a runtime and language for high performance data analytics, developed
+in the Stanford Infolab. It is implemented
+in &lt;a href=&quot;https://www.rust-lang.org&quot;&gt;Rust&lt;/a&gt;, a modern take on a fast systems
+programming language. In this blog post we provide our experiences
+implementing a low-level systems research project in Rust (with no prior
+experience with the language). We hope this will help other developers evaluate
+Rust when choosing a language for their system.&lt;/p&gt;
+
+&lt;p&gt;First, a bit of background on Weld. The Weld
+language includes common functional operators like &lt;code class=&quot;highlighter-rouge&quot;&gt;map&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;filter&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;reduce&lt;/code&gt;,
+and &lt;code class=&quot;highlighter-rouge&quot;&gt;groupBy&lt;/code&gt;. Writers of analytics libraries who want to improve performance can
+make their APIs lazy and emit Weld code for individual functions. Our runtime can then
+optimize entire call graphs and produce fast native code without unnecessary
+intermediate data materialization. Weld is essentially a just-in-time (JIT)
+compilation system for analytics libraries.&lt;/p&gt;
+
+&lt;p&gt;In brief, Rust was a joy to work with. Its powerful pattern matching made
+writing compiler optimization rules very easy, and we found that code that
+compiled usually “just worked” because of the stringent checks Rust’s own
+compiler performs on code the programmer writes. Additionally, writing C APIs
+in Rust was also very easy; Rust provides good support and documentation for
+doing this. While there are a few features the Rust developers are working on
+which we hope appear in the stable compiler soon (namely, incremental
+compilation and the &lt;code class=&quot;highlighter-rouge&quot;&gt;box&lt;/code&gt; keyword), we wholeheartedly reccomend Rust to those
+looking for a fun, powerful programming language for their next project.&lt;/p&gt;
+
+&lt;p&gt;Stay tuned for another blog post that describes Weld in greater detail. For
+now, keep reading for our thoughts on writing Weld in Rust, and join the
+discussion on Weld on our &lt;a href=&quot;https://groups.google.com/forum/#!forum/weld-users&quot;&gt;Google
+Group&lt;/a&gt;!&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Outline&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;#experiences-with-rust&quot;&gt;Experiences with Rust&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#implementing-rule-based-optimizations-with-pattern-matching&quot;&gt;Implementing Rule-Based Optimizations with Pattern Matching&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#handling-errors&quot;&gt;Handling Errors&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#rustc-compilation-times&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;rustc&lt;/code&gt; Compilation Times&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#interfacing-with-c&quot;&gt;Interfacing with C&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#summary&quot;&gt;Summary&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;experiences-with-rust&quot;&gt;Experiences with Rust&lt;/h2&gt;
+
+&lt;p&gt;Weld is written in around 12000 lines of Rust code. It includes a compiler with
+a tokenizer, parser, the abstract syntax tree (AST) definition, transformations
+on the AST, and a code generator targeting LLVM, as well as a C API for
+interacting with the compiler. Rust’s excellent LLVM bindings (&lt;code class=&quot;highlighter-rouge&quot;&gt;llvm-sys&lt;/code&gt;) made
+generating and JIT compiling LLVM code particularly easy.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;We used Rust v.1.14 (stable) when developing Weld.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;implementing-rule-based-optimizations-with-pattern-matching&quot;&gt;Implementing Rule-Based Optimizations with Pattern Matching&lt;/h4&gt;
+
+&lt;p&gt;Weld’s optimizer takes an AST and applies a set of rule-based optimizations to it. These optimizations
+find a subtree in the AST and replace it with a more efficient subtree.&lt;/p&gt;
+
+&lt;p&gt;Each expression in Weld is an &lt;code class=&quot;highlighter-rouge&quot;&gt;Expr&lt;/code&gt; type:&lt;/p&gt;
+
+&lt;div class=&quot;language-rust highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Expr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TypeBounds&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ExprKind&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;// other fields omitted&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ExprKind&lt;/code&gt; is an &lt;code class=&quot;highlighter-rouge&quot;&gt;enum&lt;/code&gt; which specifies the kind of expression:&lt;/p&gt;
+
+&lt;div class=&quot;language-rust highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;enum&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ExprKind&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TypeBounds&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nf&quot;&gt;Literal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;LiteralKind&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+    &lt;span class=&quot;nf&quot;&gt;Ident&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Symbol&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+    &lt;span class=&quot;nf&quot;&gt;Negate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;Box&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Expr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;BinOp&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BinOpKind&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Box&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Expr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Box&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Expr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;// more expression kinds here&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Rust’s pattern matching makes writing transformations rules easy. 
+We wrote a &lt;code class=&quot;highlighter-rouge&quot;&gt;transform&lt;/code&gt; method for the &lt;code class=&quot;highlighter-rouge&quot;&gt;Expr&lt;/code&gt; type which, given a function which
+takes an &lt;code class=&quot;highlighter-rouge&quot;&gt;Expr&lt;/code&gt; and returns an &lt;code class=&quot;highlighter-rouge&quot;&gt;Option&amp;lt;Expr&amp;gt;&lt;/code&gt;, applies the function to each
+node in the AST.  If the &lt;code class=&quot;highlighter-rouge&quot;&gt;Option&lt;/code&gt; is &lt;code class=&quot;highlighter-rouge&quot;&gt;Some(e)&lt;/code&gt;, the node to which the function
+was applied is replaced by the expression &lt;code class=&quot;highlighter-rouge&quot;&gt;e&lt;/code&gt;. If the &lt;code class=&quot;highlighter-rouge&quot;&gt;Option&lt;/code&gt; is &lt;code class=&quot;highlighter-rouge&quot;&gt;None&lt;/code&gt;, the
+expression is not substituted. This allows us to express transforms on the AST
+elegantly by defining a function which specifies a set of match rules and
+then calling &lt;code class=&quot;highlighter-rouge&quot;&gt;transform&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Below, we have a simple match rule which matches on two &lt;code class=&quot;highlighter-rouge&quot;&gt;i32&lt;/code&gt; literals being summed. The expression is replaced by summing the 
+integers at compile time and replacing the add operation with a single literal:&lt;/p&gt;
+
+&lt;div class=&quot;language-rust highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;// Replace, e.g., &quot;1 + 2&quot; with &quot;3&quot;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;expr&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;.transform&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;mut&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;ref&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;mut&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;expr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BinOp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;ref&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ref&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ref&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;expr&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.kind&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;kind&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Add&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Literal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;I32Literal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.kind&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Literal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;I32Literal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.kind&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;nf&quot;&gt;Ok&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Expr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                        &lt;span class=&quot;n&quot;&gt;ty&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Scalar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;I32&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+                        &lt;span class=&quot;n&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;I32Literal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                    &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;    
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;None&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;transform&lt;/code&gt; is taking a closure here. The nested &lt;code class=&quot;highlighter-rouge&quot;&gt;if let&lt;/code&gt; statements destructure a sub-expression to build the match rule.
+If we find a match, we replace the expression with an expression which adds the literal values.&lt;/p&gt;
+
+&lt;p&gt;One point of tedium is that we need to use &lt;code class=&quot;highlighter-rouge&quot;&gt;if let&lt;/code&gt; statements to destructure each expression
+instead of being able to “nest” destructuring structs. For example, a similar implementation in Scala is much more concise since
+patterns are nested:&lt;/p&gt;
+
+&lt;div class=&quot;language-scala highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;expr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;transform&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; 
+    &lt;span class=&quot;nc&quot;&gt;BinOp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Literal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;I32Literal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)),&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Literal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;I32Literal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)))&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;Expr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Scalar&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;I32&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;I32Literal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The reason we cannot nest match rules in Rust is that each expression in our implementation is actually a &lt;code class=&quot;highlighter-rouge&quot;&gt;Box&amp;lt;Expr&amp;gt;&lt;/code&gt;. &lt;code class=&quot;highlighter-rouge&quot;&gt;Box&lt;/code&gt; is Rust’s
+type designating heap allocated memory, and because we want to support in-place updates to the AST we want to use this type instead
+of just &lt;code class=&quot;highlighter-rouge&quot;&gt;Expr&lt;/code&gt;. Unfortunately, Rust doesn’t support nesting patterns for these boxed values, since the pattern would match on a &lt;code class=&quot;highlighter-rouge&quot;&gt;Box&lt;/code&gt;
+instead of the &lt;code class=&quot;highlighter-rouge&quot;&gt;Expr&lt;/code&gt; (in the code above, &lt;code class=&quot;highlighter-rouge&quot;&gt;ref&lt;/code&gt; dereferences the box). This causes deeply nested &lt;code class=&quot;highlighter-rouge&quot;&gt;if let&lt;/code&gt; statements even for simple match rules.&lt;/p&gt;
+
+&lt;p&gt;Rust solves this problem using the &lt;a href=&quot;https://doc.rust-lang.org/book/box-syntax-and-patterns.html&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;box&lt;/code&gt;
+keyword&lt;/a&gt;, which
+allows matching on the &lt;em&gt;contents&lt;/em&gt; of the &lt;code class=&quot;highlighter-rouge&quot;&gt;Box&lt;/code&gt;. Unfortunately, this keyword is
+not yet available in the stable version of the Rust compiler.&lt;/p&gt;
+
+&lt;h4 id=&quot;handling-errors&quot;&gt;Handling Errors&lt;/h4&gt;
+
+&lt;p&gt;Handling errors is a tedious undertaking in a systems project, and
+especially in low-level projects written in C and C++. However, Rust’s &lt;code class=&quot;highlighter-rouge&quot;&gt;Result&lt;/code&gt;
+type makes it very easy. &lt;code class=&quot;highlighter-rouge&quot;&gt;Result&amp;lt;T, U&amp;gt;&lt;/code&gt; is an enum with two variants: &lt;code class=&quot;highlighter-rouge&quot;&gt;Ok(T)&lt;/code&gt; and
+&lt;code class=&quot;highlighter-rouge&quot;&gt;Err(U)&lt;/code&gt;. These variants specify whether a function call was successful (in
+which case the function would return &lt;code class=&quot;highlighter-rouge&quot;&gt;Ok&lt;/code&gt;) or caused an error (in which case it would return &lt;code class=&quot;highlighter-rouge&quot;&gt;Err&lt;/code&gt;).&lt;/p&gt;
+
+&lt;p&gt;Most functions in the Weld implementation return a &lt;code class=&quot;highlighter-rouge&quot;&gt;Result&lt;/code&gt;, which enables use
+of the &lt;code class=&quot;highlighter-rouge&quot;&gt;try!&lt;/code&gt; macro. This macro checks if the
+&lt;code class=&quot;highlighter-rouge&quot;&gt;Result&lt;/code&gt; is &lt;code class=&quot;highlighter-rouge&quot;&gt;Ok&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;Err&lt;/code&gt;. If it is &lt;code class=&quot;highlighter-rouge&quot;&gt;Err&lt;/code&gt;, it exits the function and returns the &lt;code class=&quot;highlighter-rouge&quot;&gt;Result&lt;/code&gt;.
+If it is &lt;code class=&quot;highlighter-rouge&quot;&gt;Ok&lt;/code&gt;, it unwraps the value contained in the &lt;code class=&quot;highlighter-rouge&quot;&gt;Ok&lt;/code&gt;. This
+makes it easy to propagate errors deep in a call stack up to some place where
+they can be presented to the user. As an example, the following code appears in Weld’s parser:&lt;/p&gt;
+
+&lt;div class=&quot;language-rust highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;parse_program&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;input&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Program&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tokens&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nd&quot;&gt;try!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;tokenize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;input&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;// parse tokens&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;tokenize&lt;/code&gt; method also returns
+a &lt;code class=&quot;highlighter-rouge&quot;&gt;Result&lt;/code&gt;. If tokenization fails, the first line of the function exits and
+returns an error. Otherwise, &lt;code class=&quot;highlighter-rouge&quot;&gt;tokens&lt;/code&gt; is set to the value contained in the &lt;code class=&quot;highlighter-rouge&quot;&gt;Ok&lt;/code&gt; returned
+by &lt;code class=&quot;highlighter-rouge&quot;&gt;tokenize&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;In all, &lt;code class=&quot;highlighter-rouge&quot;&gt;Result&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;try!&lt;/code&gt; make error propagation very easy. We found
+that Rust did a much nicer job in making error handling code (something every
+program should do!) elegant when compared to the &lt;code class=&quot;highlighter-rouge&quot;&gt;errno&lt;/code&gt;s and error codes C
+programmers are accustomed to.&lt;/p&gt;
+
+&lt;h4 id=&quot;rustc-compilation&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;rustc&lt;/code&gt; Compilation&lt;/h4&gt;
+
+&lt;p&gt;Our first stab at writing a parser for Weld’s IR used a parser-generator
+library called &lt;a href=&quot;https://crates.io/crates/lalrpop&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;lalrpop&lt;/code&gt;&lt;/a&gt;.  Unfortunately, one major
+limitation of this library was the amount of code it generated. Because &lt;code class=&quot;highlighter-rouge&quot;&gt;lalrpop&lt;/code&gt; (when we used it)
+    created a parser with over 10000 lines of code, Rust took over a minute to compile it. This was partially caused
+    by the lack of incremental compilation in stable Rust.
+    These compile times took a significant toll on productivity especially since we modified the IR’s
+    parser fairly often. Eventually, we opted to implement our own recursive descent
+    parser from scratch to reduce the compilation time.&lt;/p&gt;
+
+&lt;p&gt;In general, we found that Rust code took some time to compile;
+changing a single file and then running &lt;code class=&quot;highlighter-rouge&quot;&gt;cargo build&lt;/code&gt; takes roughly 10 seconds
+on a standard laptop, while &lt;code class=&quot;highlighter-rouge&quot;&gt;cargo build --release&lt;/code&gt; (which enables compiler
+optimizations) takes around a minute.  However, because of the copious
+compile-time guarantees Rust makes in its language, we often found that
+compiled code was working code; this certainly isn’t true in most C code we
+write!&lt;/p&gt;
+
+&lt;p&gt;In addition, Rust has been looking into incremental computation &lt;a href=&quot;https://blog.rust-lang.org/2016/09/08/incremental.html&quot;&gt;for some time
+now&lt;/a&gt;; we hope this
+feature makes it into the stable compiler soon.&lt;/p&gt;
+
+&lt;h4 id=&quot;interfacing-with-c&quot;&gt;Interfacing with C&lt;/h4&gt;
+
+&lt;p&gt;Weld interfaces with C by exposing its API as a set of C functions. This allows
+Weld’s API to be called by languages such as Python, which have utilities for
+calling C functions (e.g., Python’s &lt;code class=&quot;highlighter-rouge&quot;&gt;ctypes&lt;/code&gt; module). An initial
+concern with Rust was whether it would be easy to support exporting C-style
+APIs easily; we quickly found that Rust had good support for this.&lt;/p&gt;
+
+&lt;p&gt;In Rust, a C function can be exported by using the &lt;code class=&quot;highlighter-rouge&quot;&gt;extern &quot;C&quot;&lt;/code&gt; qualifier on a function, marking
+it as public, and using the &lt;code class=&quot;highlighter-rouge&quot;&gt;#[no_mangle]&lt;/code&gt; annotation:&lt;/p&gt;
+
+&lt;div class=&quot;language-rust highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;no_mangle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;extern&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;C&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;my_c_callable_function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;println!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Hello from Rust!&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The above function will be exported and callable from C. The declaration of
+this function in C would look as you might expect:&lt;/p&gt;
+
+&lt;div class=&quot;language-c highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;my_c_callable_function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Rust also provides wrappers for C data types in the external &lt;code class=&quot;highlighter-rouge&quot;&gt;libc&lt;/code&gt; crate. Weld
+uses these to return integers and strings back into C:&lt;/p&gt;
+
+&lt;div class=&quot;language-rust highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;extern&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;crate&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;libc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;cp&quot;&gt;#[no_mangle]&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;/// Returns an unsigned 64-bit int.&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;extern&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;C&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;get_string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;libc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;uint64_t&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Things get interesting when we need to pass richer data types from Rust to C.
+Weld uses opaque handles (&lt;code class=&quot;highlighter-rouge&quot;&gt;void *&lt;/code&gt; with a typedef) in its API to do this. The
+&lt;code class=&quot;highlighter-rouge&quot;&gt;void *&lt;/code&gt; pointers are heap-allocated Rust values (i.e., values with type
+&lt;code class=&quot;highlighter-rouge&quot;&gt;Box&amp;lt;T&amp;gt;&lt;/code&gt;). Of course, C doesn’t understand what a “&lt;code class=&quot;highlighter-rouge&quot;&gt;Box&lt;/code&gt;” is, so we
+need to acquire a raw pointer before passing it out of Rust.&lt;/p&gt;
+
+&lt;p&gt;One tricky thing here is that Rust figures out when it should release memory it
+allocates. For example, a boxed value is freed when it goes out of scope.
+When passing values to C, however, this isn’t exactly what we want; Rust
+shouldn’t release a value when a &lt;code class=&quot;highlighter-rouge&quot;&gt;Box&lt;/code&gt; goes out of scope, because some C code
+might still be using its underlying data.&lt;/p&gt;
+
+&lt;p&gt;Rust gets around this with &lt;code class=&quot;highlighter-rouge&quot;&gt;Box&lt;/code&gt;’s &lt;code class=&quot;highlighter-rouge&quot;&gt;into_raw&lt;/code&gt; function. &lt;code class=&quot;highlighter-rouge&quot;&gt;into_raw&lt;/code&gt;
+automatically &lt;em&gt;forgets&lt;/em&gt; about the heap allocated memory, so it can be passed
+into C without fear of Rust deallocating it. When a heap allocated object is
+passed back into C, we can use the &lt;code class=&quot;highlighter-rouge&quot;&gt;from_raw&lt;/code&gt; function to reconstruct a &lt;code class=&quot;highlighter-rouge&quot;&gt;Box&lt;/code&gt;
+and tell Rust to treat it as an ordinary object it allocated. Alternatively, we can
+just dereference the passed pointer in Rust and do operations on it. Note that both
+of these operations are &lt;code class=&quot;highlighter-rouge&quot;&gt;unsafe&lt;/code&gt; since Rust can’t make any guarantees about whether the
+pointer is valid.&lt;/p&gt;
+
+&lt;p&gt;In all, Weld’s API looks something like the follows. For every type in the API,
+Rust allocates boxed memory and casts it to a &lt;code class=&quot;highlighter-rouge&quot;&gt;*mut T&lt;/code&gt; (a raw pointer) before
+returning it. When a C caller passes the pointer back (as a raw pointer), we
+use &lt;code class=&quot;highlighter-rouge&quot;&gt;from_raw&lt;/code&gt; to reconstruct the Rust object, and then use the object. Below
+is an example for the &lt;code class=&quot;highlighter-rouge&quot;&gt;WeldConf&lt;/code&gt; type, which wraps a Rust &lt;code class=&quot;highlighter-rouge&quot;&gt;HashMap&lt;/code&gt; and holds
+configuration options.&lt;/p&gt;
+
+&lt;div class=&quot;language-rust highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;WeldConf&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;conf_map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HashMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CString&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;// other stuff&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;cp&quot;&gt;#[no_mangle]&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;/// Return a new Weld configuration.&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;extern&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;C&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;weld_conf_new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;mut&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;WeldConf&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;// forgets the allocated value, get a raw ptr&lt;/span&gt;
+    &lt;span class=&quot;nn&quot;&gt;Box&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;into_raw&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nn&quot;&gt;Box&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nn&quot;&gt;WeldConf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()))&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;cp&quot;&gt;#[no_mangle]&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;/// Return the number of configurations in the conf.&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;unsafe&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;extern&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;C&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;weld_conf_count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;ptr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;WeldConf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;libc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;uint64_t&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    
+    &lt;span class=&quot;c&quot;&gt;// Dereference the WeldConf and convert it to a &lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;// reference.&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;conf&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ptr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;c&quot;&gt;// do stuff with conf; it's a regular Rust object.&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;conf&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;.conf_map&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;.count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;cp&quot;&gt;#[no_mangle]&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;/// Frees a configuration.&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;unsafe&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;extern&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;C&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;weld_conf_free&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;ptr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;mut&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;WeldConf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;// The value is reconstructed and then dropped&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;// (since it goes out of scope).&lt;/span&gt;
+    &lt;span class=&quot;nn&quot;&gt;Box&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;from_raw&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ptr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;In C, the header file declaring the above API looks like this:&lt;/p&gt;
+
+&lt;div class=&quot;language-c highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// The opaque handle.
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;typedef&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;weld_conf_t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// Returns a new weld configuration.
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;weld_conf_t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;weld_conf_new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;/// Return the number of configurations in the conf.
+&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;uint64_t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;weld_conf_count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;weld_conf_t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ptr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// Frees a configuration.
+&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;weld_conf_free&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;weld_conf_t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ptr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;In general, despite its many language features Rust is still able to seamlessly
+integrate with existing C programs. While developers need to be cognizant of
+when Rust frees memory to prevent dangling pointers and leaks, the Rust docs do
+a fantastic job documenting how to avoid these problems.&lt;/p&gt;
+
+&lt;h2 id=&quot;summary&quot;&gt;Summary&lt;/h2&gt;
+
+&lt;p&gt;To summarize, implementing Weld in Rust was definitely a positive experience. As
+other Rust users have reported at length, the language has a larger learning
+curve than other languages, but after grappling with the borrow checker for a
+few days the advantages of the language begin to outweigh its complexity.&lt;/p&gt;
+
+&lt;p&gt;In conclusion:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Pattern matching and Rust’s expressive &lt;code class=&quot;highlighter-rouge&quot;&gt;enum&lt;/code&gt;s are a great fit for engineering a compiler.&lt;/li&gt;
+  &lt;li&gt;Error handling code is very elegantly expressed using &lt;code class=&quot;highlighter-rouge&quot;&gt;Result&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Compilation times are slow for large files, but the guarantees Rust provides
+means bugs such as segfaults are non-existent (barring functions written using
+the FFI); generally, code that compiles is very likely to just work.&lt;/li&gt;
+  &lt;li&gt;The lack of the &lt;code class=&quot;highlighter-rouge&quot;&gt;box&lt;/code&gt; keyword makes matching on recursive data types such as
+ASTs where each node is a &lt;code class=&quot;highlighter-rouge&quot;&gt;Box&amp;lt;T&amp;gt;&lt;/code&gt; unwieldy, since programmers are stuck using
+nested &lt;code class=&quot;highlighter-rouge&quot;&gt;if let&lt;/code&gt; statements. We hope this feature makes it to stable Rust soon.&lt;/li&gt;
+  &lt;li&gt;Interfacing with C is intuitive, though it require some manual memory
+management. Nonetheless, found that the relevant libraries are very well documented.&lt;/li&gt;
+  &lt;li&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;llvm-sys&lt;/code&gt; crate, which provides wrappers around the LLVM libraries, made code generation
+in our compiler very easy.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;We hope this blog post helps other systems developers in evaluating whether
+Rust is a good choice for them, in particular when writing libraries which need
+to be called by non-Rust code.&lt;/p&gt;
+
+</content>
+ </entry>
+ 
+ <entry>
+   <title>A New DAWN for Data Analytics</title>
+   <link href="http://dawn.cs.stanford.edu/dawn/2017/04/10/dawn-intro/"/>
+   <updated>2017-04-10T00:00:00-07:00</updated>
+   <id>http://dawn.cs.stanford.edu/2017/04/10/dawn-intro</id>
+   <content type="html">&lt;p&gt;We are in the golden age of machine learning and artificial intelligence. Sustained algorithmic
+advances coupled with the availability of massive datasets and fast parallel computing have led to
+breakthroughs in applications that would have been considered science fiction even a few years ago.
+Over the past five years, voice-driven personal assistants have become commonplace, image
+recognition systems have reached human quality, and autonomous vehicles are rapidly become broadly
+available. Given these successes, there is no doubt that machine learning will transform most areas
+of our economy and society. Businesses, governments and scientific labs are clamoring to see how
+machine learning can tackle their problems.&lt;/p&gt;
+
+&lt;p&gt;Unfortunately, although new machine learning (ML) applications are impressive, they are very
+expensive to build. Every major new ML product, such as Apple Siri, Amazon Alexa, or Tesla
+Autopilot, required large and costly teams of domain experts, data scientists, data engineers, and
+DevOps to realize. Even within these successful organizations, ML remains a rare and expensive
+commodity. Moreover, many application areas require even more effort to obtain training data to feed
+their ML algorithms; for example, even though an ML algorithm achieves human quality in identifying
+pictures of dogs on the Internet (thanks to millions of available labeled images), the algorithm
+will not achieve the same quality identifying cancer in medical images unless an organization
+expends countless hours of human expert time creating training data sets. Finally, once an ML
+product is built, it requires effort to deploy, operate, and monitor at scale, especially if
+critical business processes will rely on it. In summary, ML technology is at a similar stage to
+early digital computers, where armies of technicians clad in white labored to keep a small handful
+of machines operating in production: ML technology clearly has tremendous potential, but today’s
+ML-powered systems remain far too expensive to build for most application domains.&lt;/p&gt;
+
+&lt;p&gt;To address this potential, our group at Stanford is beginning a new, five-year research project to
+design systems infrastructure and tools for &lt;em&gt;usable machine learning&lt;/em&gt;, called DAWN (Data
+Analytics for What’s Next). Our goal is &lt;em&gt;not&lt;/em&gt; to improve ML algorithms, which are almost always “good
+enough” for many important applications, but instead to make ML &lt;em&gt;usable&lt;/em&gt; so that small teams of non-ML
+experts can apply ML to their problems, achieve high-quality results, and deploy production systems
+that can be used in critical applications. While today’s ML successes have required large and costly
+teams of statisticians and engineers, we would like to make similar successes attainable for domain
+experts—for example, a hospital optimizing medical procedures, a scientist parsing terabytes of data
+from instruments, or a business applying ML to its domain-specific problems. Major improvements in
+the usability of machine learning are mandatory to realize its potential. In brief, we ask:&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;How can we enable anyone with domain expertise to build their own production-quality data products
+(without requiring a team of PhDs in machine learning, databases, and distributed systems, and
+without understanding the latest hardware)?&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;At first, our goal of usable machine learning might appear too ambitious—how can we expect one or
+two domain experts to match work that today requires teams of tens to hundreds? Our observation is
+that such revolutions ``democratizing’’ computing technology have happened before. For example,
+although textual search is a complex field requiring sophisticated algorithms and data structures,
+today, search is ubiquitous. Non-expert users rely on search engines every day, and any developer
+can add search to an application by linking a library such as Lucene or Solr. These libraries offer
+good enough results out of the box, and simple enough tuning options, to be usable by non-experts.
+Similarly, in the 1970s, relational databases revolutionized data management. Before modern
+databases, organizations built computer applications using low-level code that had to directly
+manipulate on-disk data structures and implement complex processing algorithms. Databases
+encapsulated this complexity behind simple interfaces that any developer can use, and that most
+users can even &lt;em&gt;tune&lt;/em&gt; without understanding system internals. As a result, organizations need to spend
+far less effort to build a data management application, and many run thousands of such applications.&lt;/p&gt;
+
+&lt;p&gt;With history as a guide, our key observation is that most of the effort in industrial ML
+applications is &lt;em&gt;not&lt;/em&gt; spent in devising new learning algorithms or models but is instead spent in
+three other areas: &lt;em&gt;data preparation&lt;/em&gt;, &lt;em&gt;feature selection&lt;/em&gt;, and &lt;em&gt;productionization&lt;/em&gt;&lt;sup id=&quot;fnref:1&quot;&gt;&lt;a href=&quot;#fn:1&quot; class=&quot;footnote&quot;&gt;1&lt;/a&gt;&lt;/sup&gt;. Data preparation means acquiring, producing and cleaning enough training
+data to feed into an ML algorithm: without this quality data, ML algorithms fall flat. Feature
+selection means identifying the data characteristics and behaviors of interest: what aspects of data
+are most important, and what would a domain expert implicitly or explicitly say about a given data
+point? Productionization means deploying, monitoring and debugging a robust product: how can an
+organization check that the ML algorithm deployed is working, debug issues that arise, and make the
+system robust to changes in data? In the large teams that build ML products such as Siri, most of
+the individuals work on data preparation, feature selection, productionization, and the distributed
+systems infrastructure to drive these tasks at scale, &lt;em&gt;not&lt;/em&gt; on training ML algorithms. However, thus
+far, these critical process of the ML product pipeline have received far less attention than model
+training and new model tweaks—both from the research community and the open source software
+community—and, based on our prior work in this area, we see substantial opportunity to greatly
+reduce the effort for these tasks.&lt;/p&gt;
+
+&lt;p&gt;Stay tuned.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;References&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;footnotes&quot;&gt;
+  &lt;ol&gt;
+    &lt;li id=&quot;fn:1&quot;&gt;
+      &lt;p&gt;See &lt;a href=&quot;https://papers.nips.cc/paper/5656-hidden-technical-debt-in-machine-learning-systems.pdf&quot;&gt;Hidden Technical Debt in Machine Learning Systems&lt;/a&gt; from NIPS 2015.&amp;nbsp;&lt;a href=&quot;#fnref:1&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/div&gt;
+</content>
+ </entry>
+ 
+
+</feed>

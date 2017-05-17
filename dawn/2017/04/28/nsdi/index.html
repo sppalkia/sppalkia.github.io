@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      A retrospective on NSDI 2017 &middot; Stanford DAWN
+    
+  </title>
+
+  <link rel="stylesheet" href="/dawn/styles.css">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/dawn/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/dawn/public/favicon.ico">
+  <link rel="alternate" type="application/atom+xml" title="Stanford DAWN" href="/dawn/atom.xml">
+</head>
+
+
+  <body>
+
+    <div class="container content">
+      <header class="masthead">
+        <h3 class="masthead-title" style="text-align:center">
+           <a href="/dawn/" title="Home"><span id="header-stanford">Stanford </span>DAWN</a>
+        </h3>
+      </header>
+
+      <img src="/dawn/assets/quad_center.jpg">
+
+    <nav id="menu">
+        <a  href="/dawn/people/">People</a>
+            <a  href="/dawn/members/">Members</a>
+            <a  href="/dawn/projects/">Projects</a>
+            <a  href="/dawn/blog/">Blog</a>
+            <a  href="/dawn/whitepaper/">Whitepaper</a>
+    </nav>
+
+      <main>
+        <article class="post">
+  <h1 class="post-title">A retrospective on NSDI 2017</h1>
+  <time datetime="2017-04-28T00:00:00-07:00" class="post-date">28 Apr 2017</time>
+  <p>A group of us at DAWN went to <a href="https://www.usenix.org/conference/nsdi17">NSDI</a>
+last month. The program was quite diverse, spanning a wide variety
+of sub-areas in the networking and distributed systems space.</p>
+
+<p>We were excited to see some trends in the research presented that meshed well with
+<a href="http://dawn.cs.stanford.edu/blog/dawn-intro.html">the DAWN vision</a>.</p>
+
+<h3 id="greater-emphasis-on-systems-for-machine-learning">Greater emphasis on systems for machine learning</h3>
+<p>The machine learning community has spent a
+lot of time optimizing different machine learning algorithms to achieve better
+accuracies in different settings. Despite these advances, deploying models in practice
+remains extremely hard. In particular,
+tasks like hyperparameter tuning, efficient model serving and updating of models
+in an online setting remain challenging, especially for users who are
+not machine learning experts.</p>
+
+<p><a href="https://www.usenix.org/conference/nsdi17/technical-sessions/presentation/crankshaw">Clipper</a>
+is a work from UC Berkeley that tries to make serving machine learning
+predictions faster and easier. By batching multiple concurrent queries, Clipper
+can better utilize physical compute resources (for example, blocking is fairly
+ineffective for small compute problems, but becomes far more effective
+for medium to large-sized problems), thus improving the net throughput
+of the system. Picking an arbitrarily high batch size can lead to an unacceptably
+high latency however, particularly for real-time applications like Netflix and Amazon;
+Clipper thus accepts a latency SLO that it adheres to, while still trying to maximize
+throughput.</p>
+
+<p>There were a couple of other papers in this space like
+<a href="https://www.usenix.org/conference/nsdi17/technical-sessions/presentation/hsieh">Gaia</a>, which shows that
+when training models, parameter updates can be sent over the network infrequently; and
+<a href="https://www.usenix.org/conference/nsdi17/technical-sessions/presentation/xiao">Tux2</a>, which
+improves support for machine learning algorithms on graphs.</p>
+
+<h3 id="video-as-a-source-of-new-challenges-in-data-analytics">Video as a source of new challenges in data analytics</h3>
+<p>Recent advances in computer vision have opened up an exciting new domain for machine
+learning: video processing. With as many
+as 500 hours of YouTube content uploaded every minute, it is increasingly becoming
+necessary for machine learning algorithms to be able to process video content
+efficiently. Unfortunately, processing these video streams at scale in real time
+with state-of-the-art computer vision techniques is still too expensive.</p>
+
+<p><a href="https://www.usenix.org/conference/nsdi17/technical-sessions/presentation/zhang">VideoStorm</a>
+is a system from MSR that tries to determine the best way to schedule video processing
+jobs on a cluster of machines. VideoStorm makes the observation that video analysis algorithms can be run
+with a number of parameters (image resolution, frame rate, window size) that affect
+accuracy and performance. It is able navigate the accuracy-performance tradeoff space to achieve
+high accuracy within a given computational budget.</p>
+
+<p>ExCamera (which we describe in more detail later in this post) also looks at the general
+problem of video processing – in particular, it tries to make video encoding faster.</p>
+
+<p>At DAWN, we strongly believe that effectively being able to run various analyses on
+video represents the next frontier of data analysis. In a recent arXiv submision, we
+describe <a href="https://arxiv.org/pdf/1703.02529.pdf">NoScope</a>, a system that attempts
+to train cheap filters that produce the same output as much more expensive
+convolutional neural network approaches on certain binary classification problems.</p>
+
+<h3 id="use-of-accelerators--programmable-hardware-to-ease-performance-bottlenecks">Use of accelerators &amp; programmable hardware to ease performance bottlenecks</h3>
+<p>With 40 GbE being deployed and
+100 GbE around the corner, packet processing on general-purpose CPUs is becoming increasingly difficult. 
+Unforutnately, the 
+trend toward faster networks and fewer cycles for packet processing runs counter to the 
+rising complexity of packet processing algorithms due to the growth of the cloud, 
+virtualization and increasing concerns about security. Specialized packet processing hardware 
+seems to be the only solution.</p>
+
+<p>The first paper we saw in this area was
+<a href="https://www.usenix.org/conference/nsdi17/technical-sessions/presentation/go">APUNet</a>, from authors at KAIST, which proposes the use 
+of a die-integrated GPU for packet processing. Packet processing with external GPUs is often 
+limited by data transfer over PCIe, and die-integrated GPUs avoid this cost. The paper shows 
+some good results, with speedups of up to 4x over optimized CPU implementations for functions 
+like intrusion detection and checksumming. The evaluation of the integrated GPU’s cost-effectiveness
+presented in the paper seems a bit questionable, however: the authors use AMD’s list prices for 
+components, which may be influenced by marketing and business factors rather than just 
+manufacturing cost. A better evaluation would have compared performance of CPU and GPU-based 
+systems in terms of throughput per unit die area and per watt.</p>
+
+<p>The second paper related to this trend was
+<a href="https://www.usenix.org/conference/nsdi17/technical-sessions/presentation/firestone">VFP</a>
+from Microsoft. As users of the Microsoft Azure 
+cloud demand more functionality (such as ACLs and fine-grained billing) from the network, packet 
+processing tasks are becoming more complex – as network link speeds continue to increase. Microsoft 
+has observed that most of the network functionality they require can be implemented at the host 
+level and does not require network-wide state, but an FPGA is still required per host to keep up with the traffic. 
+Maintaining a large team of digital circuit engineers to develop an FPGA-based platform must be 
+costly, and it remains to be seen whether commodity NICs will be able to catch up to Microsoft’s 
+needs.</p>
+
+<h3 id="advent-of-distributed-computation-frameworks-with-fine-grained-parallelism">Advent of distributed computation frameworks with fine-grained parallelism</h3>
+<p>Despite much work in the distributed
+systems community, systems to efficiently execute applications with fine-grained tasks do not exist today.</p>
+
+<p><a href="https://www.usenix.org/conference/nsdi17/technical-sessions/presentation/fouladi">ExCamera</a>,
+a paper written by colleagues at Stanford, proposes a new video encoding algorithm
+that runs on top of <a href="https://aws.amazon.com/lambda/">Amazon Lambda</a>. Conventionally, video codecs parallelize
+encoding by breaking up a large video into smaller chunks, and then encoding each
+of these chunks independently. This however forces a larger frame at the start of
+each chunk, and this adversely affects the size of the encoded video. Thus, the current
+naïve way of parallelizing an encoding task creates fairly large encoded videos.</p>
+
+<p>ExCamera is able to do better by passing state from each chunk to the next to reduce the size
+of chunks’ initial frames; this process can be performed in parallel across all of the chunks.
+ExCamera is able to use 1000s of threads
+in the cloud, seeing speedups of 56x on a representative
+encoding task compared to the multi-threaded <code class="highlighter-rouge">vpxenc</code>
+implementation.</p>
+
+<p>While it focused primarily on video encoding, the techniques presented in this paper can be generalized to
+other computation-intensive tasks such as compilation, interactive machine learning
+and visualization.</p>
+
+<h3 id="desire-for-performance-without-compromising-on-programmability">Desire for performance without compromising on programmability</h3>
+<p><a href="https://www.usenix.org/conference/nsdi17/technical-sessions/presentation/ousterhout">Flexplane</a>
+is a system that allows software emulation of network algorithms at near-line rate.
+As opposed to running these algorithms completely in simulation, Flexplane
+keeps the end hosts unchanged and only emulates the parts of the computation that run on switches.
+This ensures that the nuances of hardware stacks and NICs are captured, while also
+making integrations with real applications like Spark easy, since the interfaces
+to applications are unchanged. Flexplane places an
+emphasis on ease of programmability, allowing users to quickly iterate on their
+ideas and experiments, but without compromising on performance. Flexplane communicates
+with the emulator (which resides on a stand-alone multicore machine) through “abstract
+packets” (at a high level, the original packet without the payload).</p>
+
+<p><a href="https://www.usenix.org/conference/nsdi17/technical-sessions/presentation/jamshed">mOS</a>
+(recipient of this year’s Best Paper Award) is a
+reusable network stack for middleboxes which monitors flow state.
+Middleboxes are network appliances which perform complex tasks on traffic
+flowing through them; common middleboxes include intrusion detection systems and accounting devices.
+Unfortunately, programming these middleboxes is very
+difficult; there is no API for performing standard tasks like detecting packet retransmissions,
+reconstructing TCP streams, and inspecting HTTP headers for malicious payloads.
+mOS provides such an API, taking care to cleanly separate the API from the application-specific
+logic of the middlebox. Developers can track network state for the client and server by listening
+for particular <em>events</em> that occur in flows. To solve the
+scalability issue of maintaining a list of registered events for each connection, events are shared
+between sockets which look at similar classes of data.</p>
+
+<p>Both Flexplane and mOS recognize the need for programmability to go hand-in-hand with performance –
+offering hard-to-use programming interfaces often makes good performance hard to achieve in
+practice. <a href="http://weld.stanford.edu">Weld</a>, a system we’ve been working on at DAWN, tries to address
+similar challenges in the data analytics domain; even though this is a significantly different domain
+than packet processing, we believe the general idea of designing systems that offer performance without
+sacrificing on programmability is an important one to keep in mind.</p>
+
+</article>
+
+
+<aside class="related">
+  <h3>Related posts</h3>
+  <ul class="related-posts">
+    
+      <li>
+        <a href="/dawn/2017/05/12/holoclean/">
+          HoloClean - Weakly Supervised Data Repairing
+          <small><time datetime="2017-05-12T00:00:00-07:00">12 May 2017</time></small>
+        </a>
+      </li>
+    
+      <li>
+        <a href="/dawn/2017/05/08/snorkel/">
+          Snorkel and The Dawn of Weakly Supervised Machine Learning
+          <small><time datetime="2017-05-08T00:00:00-07:00">08 May 2017</time></small>
+        </a>
+      </li>
+    
+      <li>
+        <a href="/dawn/2017/04/25/weld/">
+          Implementing Weld in Rust
+          <small><time datetime="2017-04-25T00:00:00-07:00">25 Apr 2017</time></small>
+        </a>
+      </li>
+    
+  </ul>
+</aside>
+
+
+      </main>
+
+
+          <footer class="footer">
+        <small>
+          &copy; <time datetime="2017-05-16T23:31:27-07:00">2017</time>. All rights reserved.
+        </small>
+      </footer>
+    </div>
+
+
+    
+  </body>
+</html>
