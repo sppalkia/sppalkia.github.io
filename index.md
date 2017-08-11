@@ -10,6 +10,7 @@ layout: default
 
 {% include text/text.md %}
 {% include text/publications.md %}
+{% include text/past.md %}
 
 ### Contact
 
