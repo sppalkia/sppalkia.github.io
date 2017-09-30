@@ -1,4 +1,4 @@
-I am a second year Ph.D. student at Stanford University, advised by [Prof.
+I am a third year Ph.D. student at Stanford University, advised by [Prof.
 Matei Zaharia](https://cs.stanford.edu/~matei/). My research interests include
 performance in cloud computing, distributed systems, and computer networks.
 
