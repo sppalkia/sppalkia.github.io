@@ -1,5 +1,11 @@
 ### Publications
 
+Democratizing Online Service Hosting for Data Privacy.
+<br>
+Shoumik Palkar, Matei Zaharia.
+<br>
+_To appear in HotNets 2017._
+
 [Weld: Rethinking the Interface Between Data-Intensive Applications.](https://arxiv.org/abs/1709.06416)
 <br>
 Shoumik Palkar, James Thomas, Deepak Narayanan, Anil Shanbhag, Holger Pirk, Malte Schwarzkopf, Saman Amarasinghe, Samuel Madden, Matei Zaharia.
