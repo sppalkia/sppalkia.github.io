@@ -12,6 +12,7 @@ html {
   }
 }
 
+
 body {
   margin: 2rem 0 5rem;
   color: #333;
@@ -152,4 +153,14 @@ pre > code {
   max-width: 30rem;
   margin: 0 auto;
   padding: 0 1rem;
+}
+
+
+#footer {
+  color: #AAA;
+  font-size: 14px;
+}
+
+#footer a {
+  color: #777;
 }

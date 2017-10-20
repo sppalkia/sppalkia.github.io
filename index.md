@@ -2,6 +2,8 @@
 layout: default
 ---
 
+
+
 <div style="display:table-cell;vertical-align:middle;">
   <div>
   <img src="static/images/profile17.jpg" alt="Shoumik Palkar" style="width:300px;margin-bottom:1rem;">
