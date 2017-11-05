@@ -150,22 +150,6 @@ pre > code {
   padding: 0;
 }
 
-.logoheader {
-  overflow:auto;
-}
-
-.logoheader h1 {
-  float: left;
-  margin-right: -1.5em ;
-}
-
-.logoheader img {
-  float: relative;
-  height: 36px;
-  margin-bottom: 1em;
-}
-
-
 .container {
   max-width: 35rem;
   margin: 0 auto;
