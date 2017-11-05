@@ -1,6 +1,6 @@
 ### Publications and Preprints
 
-[Democratizing Online Service Hosting for Data Privacy.]()
+[DIY Hosting for Online Privacy.](static/papers/diy.pdf)
 <br>
 Shoumik Palkar, Matei Zaharia.
 <br>
