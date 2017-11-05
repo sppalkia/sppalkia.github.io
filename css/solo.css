@@ -9,7 +9,7 @@ html {
 
 @media (min-width: 30rem) {
   html {
-    font-size: 18px;
+    font-size: 15px;
   }
 }
 
@@ -75,7 +75,7 @@ h2 {
 
 h3, h4, h5, h6 {
   margin-top: 1.5rem;
-  font-size: 1rem;
+  font-size: 1.25rem;
   text-transform: uppercase;
 }
 
@@ -150,6 +150,22 @@ pre > code {
   padding: 0;
 }
 
+.logoheader {
+  overflow:auto;
+}
+
+.logoheader h1 {
+  float: left;
+  margin-right: -1.5em ;
+}
+
+.logoheader img {
+  float: relative;
+  height: 36px;
+  margin-bottom: 1em;
+}
+
+
 .container {
   max-width: 35rem;
   margin: 0 auto;
@@ -159,7 +175,7 @@ pre > code {
 
 #footer {
   color: #AAA;
-  font-size: 14px;
+  font-size: 10px;
 }
 
 #footer a {
