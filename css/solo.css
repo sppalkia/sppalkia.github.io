@@ -4,6 +4,7 @@
 html {
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;
+  background-color: #111;
 
 }
 
@@ -16,7 +17,7 @@ html {
 
 body {
   margin: 2rem 0 5rem;
-  color: #333;
+  color: #bbb;
 }
 
 @media (min-width: 30rem) {
@@ -26,7 +27,7 @@ body {
 }
 
 a {
-  color: #0074d9; /* From http://clrs.cc */
+  color: #33b5e5;
   text-decoration: none;
 }
 
@@ -39,7 +40,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
   margin: 0 0 0.5rem -0.1rem /* align left edge */;
   line-height: 1;
-  color: #111;
+  color: #eee;
   text-rendering: optimizeLegibility;
 }
 

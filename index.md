@@ -2,7 +2,12 @@
 layout: default
 ---
 
+<hr>
+
 {% include text/text.md %}
+
+<hr>
+
 {% include text/publications.md %}
 {% include text/past.md %}
 
