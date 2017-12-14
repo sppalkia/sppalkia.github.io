@@ -3,8 +3,12 @@ layout: default
 ---
 
 {% include text/text.md %}
+<hr>
+
 {% include text/publications.md %}
+<hr>
 {% include text/past.md %}
+<hr>
 
 ### Contact
 
