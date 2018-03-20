@@ -1,5 +1,11 @@
 ### Publications and Preprints
 
+[Filter Before You Parse: Faster Analytics on Raw Data.](static/papers/sparser.pdf)
+<br>
+Shoumik Palkar, Firas Abuzaid, Peter Bailis, and Matei Zaharia.
+<br>
+_Under Submission._
+
 [DIY Hosting for Online Privacy.](static/papers/diy.pdf)
 <br>
 Shoumik Palkar and Matei Zaharia.
