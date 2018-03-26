@@ -29,3 +29,10 @@ In _CIDR 2017._
 Shoumik Palkar, Chang Lan, Sangjin Han, Keon Jang, Aurojit Panda, Sylvia Ratnasamy, Luigi Rizzo, and Scott Shenker.
 <br>
 In _SOSP 2015._
+
+[SoftNIC: A Software NIC to Augment Hardware.](http://www2.eecs.berkeley.edu/Pubs/TechRpts/2015/EECS-2015-155.pdf)
+<br>
+Sangjin Han, Keon Jang, Aurojit Panda, Shoumik Palkar, Dongsu Han, and Sylvia Ratnasamy
+<br>
+_UC Berkeley Technical Report No. UCB/EECS-2015-155_
+
