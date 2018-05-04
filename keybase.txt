@@ -1,0 +1,75 @@
+==================================================================
+https://keybase.io/shoumik
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://www.shoumik.xyz
+  * I am shoumik (https://keybase.io/shoumik) on keybase.
+  * I have a public key with fingerprint 341A DF1F 325C 453A BF16  098C 7947 B786 5BEE F34B
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "01200ca646cb7951e812a374139b5a4302509a318c9a6915c121575e6be043ea716e0a",
+      "fingerprint": "341adf1f325c453abf16098c7947b7865beef34b",
+      "host": "keybase.io",
+      "key_id": "7947b7865beef34b",
+      "kid": "0101d9057cdcfc10bf342696aab796881c0971067dcd234c66a0e6202f81885c56250a",
+      "uid": "a277a7c87968ef449b93072fe0a3c319",
+      "username": "shoumik"
+    },
+    "service": {
+      "hostname": "www.shoumik.xyz",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 1
+  },
+  "ctime": 1525457894,
+  "expire_in": 157680000,
+  "prev": "b24d4d3c71bf730578ad1fb6a13f7b6e70be9290e0b587b4b29941ab5b9277e7",
+  "seqno": 13,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: Keybase OpenPGP v2.0.76
+Comment: https://keybase.io/crypto
+
+yMNyAnicbVJ7UFRVHOY9I7CBQkqEIZdwQNbtnvs69y5TGToDRIRAMZHJdh/nLhdk
+d90HC5KpOSUWqNQAPWRwwnJyHGzJCUSb5GUxkoIQM2gQTAITA0sNMypBj3sZ/K/z
+z5nz+33fd77vd06Pzt8n2Lcire29Pd7FTN8bnZ+6fF6fa56uxASrVIEZK7EStLqh
+fRJyOE0lioQZMRwQOC7yDMWIAuRogFhA8CSkAMkJNE+ROEHjHE8CVuR4hgO0CAhA
+QxoxAsIpEvEQMAjnMT0mKxYzstvsisWpypIU4CUZyCRBixRN8oIMGJxjRchRUIAs
+QwsIySQlqMQiq0NjqOYE3oEMilWtqQfTqr3/wT/yjQOJw2koSqIsAlxQuwTDMTyv
+xmBYFog4BwHOQEmUCJISGYbHEUPghMwClqVFmlGDab5dq3I8ASEPRVbjIpmiOIEj
+cUjIajZSJAGnAR3IbuFLkYp2FFldpUoJdlCPqcUyRUTaXLUgawC3221YAxnKKw6o
+bJvd6rSK1n1qs8jptDmMGtlZYVtFI8G0pmMSFIukTlJllCG7Q7FaMCNQkaJT0YQB
+TdAUDVmO0mOo3KbYkUnREDRkWFxd2j2oTJUUCEqiJFKEQJAhqY6J5SUgCwwPSBkK
+DIK4gDiCwxEu0CwUKIHgOPXJBFrg1EkgiGnJ9lusqjap+uTNWmrFbOGdLjvCDnZ1
+vhHg4xvsExTop30xn+B14Y8+HjMQ7vNOr1c+W/97u7M7uqqhMS/r9tDbN2r2/vTv
++YjK7Ly/JyPzN0w3xnYdWWwfXanKSfNuIQqbf4srdM9MHL6pK4xBrx7tvnzM0yaa
+qltbjh6P/LPlTGLxM96cJcPg0AClRFQNrHToc5pfG0m7Vp4sZKx/kPbsmWLziQZj
+KryS/EpfpqHKc+u5FCrn3eXclPbtd8wgLy3+Hrd1665Tv9T0nPDdHD83HzoUUNyX
+cO2zNkfgpiW7pfaH6MVz/KGHTdfZ4fGI/m9mhjeONfXecUSmTjVeGHfrPG5mOGSe
+f+rw06cuE9Ol6SfFdYk7uva8VTN+3bxtmK9L1us23/IURLW+OZMfUmc5d/pqp2c5
+58V7Uz8HxrpnHuTf3uYBpUXdF09Oru//4nzH9ifFsd2VC/V/BVRHzjwcnCt5aXx/
+kj4m49uQkMbEu32he0vaJ7ZcGZ3IOJ3fm8LHzX3prfPPvvTBzQJHb/FF3ROAMh6Y
+6v++9dLZ3dbxwdqY2djokdxZz0pW8OTVMOeOOK89fGnWL0ofX32o7rtjqXEXEqKy
+lueDksQxGLQwG2v78fPFjxpcOq+3Y9NQwcd5BsnP8Ie9MPI+luk/MJFU8WGTb4Ty
+1YbnI0ZzO8J6/xlJv9vzuLX2sa8DW1NrB0In0z/JiI8qy5aOhN2vCrE7DC8z4S3O
++l83vr/wQvwuR8JO185Uz3/6jr/k
+=f/vO
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/shoumik
+
+==================================================================
