@@ -7,6 +7,8 @@ layout: default
 
 {% include text/publications.md %}
 <hr>
+{% include text/talks.md %}
+<hr>
 {% include text/past.md %}
 <hr>
 
