@@ -6,11 +6,11 @@
 <br>
 _Under Submission._
 
-[Evaluating End-to-End Optimization for Data Analytics Applications in Weld.](/)
+[Evaluating End-to-End Optimization for Data Analytics Applications in Weld.](http://www.vldb.org/pvldb/vol11/p1002-palkar.pdf)
 <br>
 **Shoumik Palkar**, James Thomas, Deepak Narayanan, Pratiksha Thaker, Parimarjan Negi, Rahul Palamuttam, Anil Shanbhag, Holger Pirk, Malte Schwarzkopf, Saman Amarasinghe, Samuel Madden, and Matei Zaharia.
 <br>
-_To appear in VLDB 2018._
+_In VLDB 2018._
 
 [DIY Hosting for Online Privacy.](static/papers/diy.pdf)
 <br>
