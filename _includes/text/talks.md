@@ -1,5 +1,10 @@
 ### Talks
 
+[Sparser: Fast Analytics over Raw Data by Avoiding Parsing](https://databricks.com/session/sparser-faster-parsing-of-unstructured-data-formats-in-apache-spark)
+<br>
+_at Spark+AI Summit, June 2018, San Francisco, CA._
+<br>
+
 [Weld: Accelerating Data Science by 100x](http://www.dataengconf.com/weld-accelerating-data-science-by-100x)
 <br>
 _at DataEngConf, April 2018, San Francisco, CA._
