@@ -4,7 +4,7 @@
 <br>
 **Shoumik Palkar**, Firas Abuzaid, Peter Bailis, and Matei Zaharia.
 <br>
-_Under Submission._
+_To appear in VLDB 2018._
 
 [Evaluating End-to-End Optimization for Data Analytics Applications in Weld.](http://www.vldb.org/pvldb/vol11/p1002-palkar.pdf)
 <br>
