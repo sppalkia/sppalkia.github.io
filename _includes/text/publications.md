@@ -1,5 +1,11 @@
 ### Publications and Preprints
 
+[Splitability Annotations: Optimizing Black-Box Function Composition in Existing Libraries.](https://arxiv.org/abs/1810.12297)
+<br>
+**Shoumik Palkar** and Matei Zaharia.
+<br>
+_Arxiv Preprint._
+
 [Filter Before You Parse: Faster Analytics on Raw Data with Sparser.](https://www.vldb.org/pvldb/vol11/p1576-palkar.pdf)
 <br>
 **Shoumik Palkar**, Firas Abuzaid, Peter Bailis, and Matei Zaharia.
