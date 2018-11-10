@@ -1,5 +1,11 @@
 ### Publications and Preprints
 
+[Exploring the Use of Learning Algorithms for Performance Profiling.]()
+<br>
+**Shoumik Palkar**, Sahaana Suri, Peter Bailis, and Matei Zaharia.
+<br>
+_To appear at the ML for Systems Workshop, NIPS 2018._
+
 [Splitability Annotations: Optimizing Black-Box Function Composition in Existing Libraries.](https://arxiv.org/abs/1810.12297)
 <br>
 **Shoumik Palkar** and Matei Zaharia.
