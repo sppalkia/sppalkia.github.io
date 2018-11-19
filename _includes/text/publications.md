@@ -6,11 +6,11 @@
 <br>
 _To appear at the NIPS 2018 Workshop on Machine Learning for Systems._
 
-[Splitability Annotations: Optimizing Black-Box Function Composition in Existing Libraries.](https://arxiv.org/abs/1810.12297)
+[Splitability Annotations: Optimizing Black-Box Function Composition in Existing Libraries.](https://arxiv.org/pdf/1810.12297.pdf)
 <br>
 **Shoumik Palkar** and Matei Zaharia.
 <br>
-_Arxiv Preprint._
+_Arxiv Preprint 1810.12297._
 
 [Filter Before You Parse: Faster Analytics on Raw Data with Sparser.](https://www.vldb.org/pvldb/vol11/p1576-palkar.pdf)
 <br>
@@ -30,11 +30,11 @@ _In VLDB 2018._
 <br>
 _In HotNets 2017._
 
-[Weld: Rethinking the Interface Between Data-Intensive Applications.](https://arxiv.org/abs/1709.06416)
+[Weld: Rethinking the Interface Between Data-Intensive Applications.](https://arxiv.org/pdf/1709.06416.pdf)
 <br>
 **Shoumik Palkar**, James Thomas, Deepak Narayanan, Anil Shanbhag, Holger Pirk, Malte Schwarzkopf, Saman Amarasinghe, Samuel Madden, and Matei Zaharia.
 <br>
-_Arxiv Preprint._
+_Arxiv Preprint 1709.06416._
 
 [Weld: A Common Runtime for Data Analytics.](static/papers/cidr-weld.pdf)
 <br>
