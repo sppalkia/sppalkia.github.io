@@ -4,7 +4,7 @@
 <br>
 **Shoumik Palkar**, Sahaana Suri, Peter Bailis, and Matei Zaharia.
 <br>
-_To appear at the NeurIPS 2018 Workshop on Machine Learning for Systems._
+_In NeurIPS 2018 Workshop on Machine Learning for Systems._
 
 [Splitability Annotations: Optimizing Black-Box Function Composition in Existing Libraries.](https://arxiv.org/pdf/1810.12297.pdf)
 <br>
