@@ -5,6 +5,8 @@ layout: default
 
 {% include text/text.md %}
 <hr>
+{% include text/projects.md %}
+<hr>
 
 {% include text/publications.md %}
 <hr>
