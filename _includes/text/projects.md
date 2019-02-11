@@ -15,9 +15,9 @@ by as much as 9x end-to-end, and accelerates state-of-the-art parsers by up to 2
 * **Splitability annotations**, an abstraction that allows developers to use an annotation system over library functions to enable
 some of the optimizations from Weld such as pipelining and parallelization: without changing existing code. These annotations can improve performance in parallel applications
 using optimized libraries such as Intel MKL by up to 20x, with significantly less effort than porting a library to use an IR
-([preprint](https://arxiv.org/pdf/1810.12297.pdf)).
+([preprint](https://arxiv.org/pdf/1810.12297.pdf), code coming soon).
 
 * **Deploy It Yourself (DIY)**, a paradigm for securely hosting personal web applications such as email and instant messaging on the public cloud. DIY is decentralized and allows users to
-manage access to their own data ([vision paper](static/papers/diy.pdf)).
+manage access to their own data ([code](https://github.com/diy-project), [vision paper](static/papers/diy.pdf)).
 
 I have also worked on projects that aim to improve the performance of tracing profilers using learning methods, and in the past, systems related to network functions virtualization.
