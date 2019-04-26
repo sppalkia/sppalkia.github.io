@@ -1,4 +1,4 @@
-### Publications and Preprints
+### Publications
 
 [Exploring the Use of Learning Algorithms for Efficient Performance Profiling.](static/papers/paikana-nips18.pdf)
 <br>
@@ -10,25 +10,19 @@ _In NeurIPS 2018 Workshop on Machine Learning for Systems._
 <br>
 **Shoumik Palkar**, Firas Abuzaid, Peter Bailis, and Matei Zaharia.
 <br>
-_In VLDB 2018._
+_In PVLDB 2018._
 
 [Evaluating End-to-End Optimization for Data Analytics Applications in Weld.](https://www.vldb.org/pvldb/vol11/p1002-palkar.pdf)
 <br>
 **Shoumik Palkar**, James Thomas, Deepak Narayanan, Pratiksha Thaker, Parimarjan Negi, Rahul Palamuttam, Anil Shanbhag, Holger Pirk, Malte Schwarzkopf, Saman Amarasinghe, Samuel Madden, and Matei Zaharia.
 <br>
-_In VLDB 2018._
+_In PVLDB 2018._
 
 [DIY Hosting for Online Privacy.](static/papers/diy.pdf)
 <br>
 **Shoumik Palkar** and Matei Zaharia.
 <br>
 _In HotNets 2017._
-
-[Weld: Rethinking the Interface Between Data-Intensive Applications.](https://arxiv.org/pdf/1709.06416.pdf)
-<br>
-**Shoumik Palkar**, James Thomas, Deepak Narayanan, Anil Shanbhag, Holger Pirk, Malte Schwarzkopf, Saman Amarasinghe, Samuel Madden, and Matei Zaharia.
-<br>
-_Arxiv Preprint 1709.06416._
 
 [Weld: A Common Runtime for Data Analytics.](static/papers/cidr-weld.pdf)
 <br>
@@ -42,9 +36,16 @@ In _CIDR 2017._
 <br>
 In _SOSP 2015._
 
+### Tech Reports
+
+[Weld: Rethinking the Interface Between Data-Intensive Applications.](https://arxiv.org/pdf/1709.06416.pdf)
+<br>
+**Shoumik Palkar**, James Thomas, Deepak Narayanan, Anil Shanbhag, Holger Pirk, Malte Schwarzkopf, Saman Amarasinghe, Samuel Madden, and Matei Zaharia.
+<br>
+_Arxiv Preprint 1709.06416._
+
 [SoftNIC: A Software NIC to Augment Hardware.](https://www2.eecs.berkeley.edu/Pubs/TechRpts/2015/EECS-2015-155.pdf)
 <br>
 Sangjin Han, Keon Jang, Aurojit Panda, **Shoumik Palkar**, Dongsu Han, and Sylvia Ratnasamy
 <br>
 _UC Berkeley Technical Report No. UCB/EECS-2015-155_
-
