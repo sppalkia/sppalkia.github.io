@@ -1,5 +1,11 @@
 ### Publications
 
+[Optimizing Data Intensive Computations in Existing Libraries with Split Annotations.]()
+<br>
+**Shoumik Palkar** and Matei Zaharia.
+<br>
+_To appear in SOSP 2019._
+
 [Exploring the Use of Learning Algorithms for Efficient Performance Profiling.](static/papers/paikana-nips18.pdf)
 <br>
 **Shoumik Palkar**, Sahaana Suri, Peter Bailis, and Matei Zaharia.

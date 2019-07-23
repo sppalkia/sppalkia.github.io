@@ -7,6 +7,10 @@ workloads by up to 30x, and also enables portability of parallel software to
 new hardware
 ([website and code](https://www.weld.rs), [vision paper](static/papers/cidr-weld.pdf), [optimizer paper](https://www.vldb.org/pvldb/vol11/p1002-palkar.pdf)).
 
+ * **Split annotations**, an abstraction that allows developers to use an annotation system over library functions to enable
+some of the optimizations from Weld such as pipelining and parallelization, without changing existing code. These annotations can improve performance in parallel applications
+using optimized libraries such as Intel MKL by up to 20x, with significantly less effort than porting a library to use an IR (paper and code coming soon).
+
 * **Raw filtering**, a technique that accelerates analytics over unparsed data by applying query filters to
 raw bytestreams rather than parsed objects. Our system that implements raw filtering, Sparser, can improve Spark workloads over JSON
 by as much as 9x end-to-end, and accelerates state-of-the-art parsers by up to 22x for selective queries
