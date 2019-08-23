@@ -1,5 +1,9 @@
 ### Talks
 
+[Rust for Weld: A High Performance Parallel JIT Compiler](https://rustconf.com/schedule/#rust-for-weld-a-high-performance-parallel-jit-compiler)
+<br>
+_at RustConf 2019, August 2019, Portland, OR._
+
 [Sparser: Fast Analytics over Raw Data by Avoiding Parsing](https://databricks.com/session/sparser-faster-parsing-of-unstructured-data-formats-in-apache-spark)
 <br>
 _at Spark+AI Summit, June 2018, San Francisco, CA._
