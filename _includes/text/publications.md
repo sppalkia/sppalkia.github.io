@@ -1,6 +1,6 @@
 ### Publications
 
-[Optimizing Data Intensive Computations in Existing Libraries with Split Annotations.]()
+[Optimizing Data-Intensive Computations in Existing Libraries with Split Annotations.](static/papers/mozart-sosp19final.pdf)
 <br>
 **Shoumik Palkar** and Matei Zaharia.
 <br>
