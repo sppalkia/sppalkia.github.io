@@ -9,7 +9,7 @@ new hardware
 
  * **Split annotations**, an abstraction that allows developers to use an annotation system over library functions to enable
 some of the optimizations from Weld such as pipelining and parallelization, without changing existing code. These annotations can improve performance in parallel applications
-using optimized libraries such as Intel MKL by up to 20x, with significantly less effort than porting a library to use an IR (paper and code coming soon).
+using optimized libraries such as Intel MKL by up to 20x, with significantly less effort than porting a library to use an IR ([code](https://www.github.com/weld-project/split-annotations), [paper](static/papers/mozart-sosp19final.pdf)).
 
 * **Raw filtering**, a technique that accelerates analytics over unparsed data by applying query filters to
 raw bytestreams rather than parsed objects. Our system that implements raw filtering, Sparser, can improve Spark workloads over JSON
