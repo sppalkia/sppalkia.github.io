@@ -1,6 +1,6 @@
 ### Talks
 
-[Rust for Weld: A High Performance Parallel JIT Compiler](https://rustconf.com/schedule/#rust-for-weld-a-high-performance-parallel-jit-compiler)
+[Rust for Weld: A High Performance Parallel JIT Compiler](https://www.youtube.com/watch?v=gr11KYrB78E)
 <br>
 _at RustConf 2019, August 2019, Portland, OR._
 
