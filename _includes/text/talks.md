@@ -1,5 +1,10 @@
 ### Talks
 
+[Weld: An Optimizing Runtime for High Performance Data Analytics](https://youtu.be/6jJUA_JSCyo)
+<br>
+_at Scale By the Bay 2019, November 2019, Oakland, CA._
+<br>
+
 [Rust for Weld: A High Performance Parallel JIT Compiler](https://www.youtube.com/watch?v=gr11KYrB78E)
 <br>
 _at RustConf 2019, August 2019, Portland, OR._

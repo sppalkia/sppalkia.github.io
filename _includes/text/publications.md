@@ -4,7 +4,7 @@
 <br>
 **Shoumik Palkar** and Matei Zaharia.
 <br>
-_To appear in SOSP 2019._
+_In SOSP 2019._
 
 [Exploring the Use of Learning Algorithms for Efficient Performance Profiling.](static/papers/paikana-nips18.pdf)
 <br>
