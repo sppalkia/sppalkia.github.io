@@ -1,5 +1,11 @@
 ### Publications
 
+[Willump: A Statistically-Aware End-to-end Optimizer for Machine Learning Inference](/)
+<br>
+Peter Kraft, Daniel Kang, Deepak Narayanan, **Shoumik Palkar**, Peter Bailis, and Matei Zaharia.
+<br>
+_To appear in MLSys 2020._
+
 [Optimizing Data-Intensive Computations in Existing Libraries with Split Annotations.](static/papers/mozart-sosp19final.pdf)
 <br>
 **Shoumik Palkar** and Matei Zaharia.
