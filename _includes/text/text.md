@@ -9,4 +9,4 @@ I am graduating in Spring 2020 and joining
 new execution engine for Spark SQL. I recently defended my Ph.D. thesis: you
 can find the slides for my talk
 [here](static/papers/shoumik-defense-slides.pdf) and a video recording
-[here](https://youtu.be/UrWD3Z9kMbY).
+[here](https://www.youtube.com/watch?v=qze_aB4dPDw).
