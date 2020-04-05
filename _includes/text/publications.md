@@ -4,7 +4,7 @@
 <br>
 Peter Kraft, Daniel Kang, Deepak Narayanan, **Shoumik Palkar**, Peter Bailis, and Matei Zaharia.
 <br>
-_To appear in MLSys 2020._
+_In MLSys 2020._
 
 [Optimizing Data-Intensive Computations in Existing Libraries with Split Annotations.](static/papers/mozart-sosp19final.pdf)
 <br>
