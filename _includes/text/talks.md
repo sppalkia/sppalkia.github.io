@@ -1,5 +1,10 @@
 ### Talks
 
+[Interfaces for Efficient Software Composition on Modern Hardware](https://www.youtube.com/watch?v=qze_aB4dPDw)
+<br>
+_Ph.D. Defense, April 2020, Stanford, CA._
+<br>
+
 [Weld: An Optimizing Runtime for High Performance Data Analytics](https://youtu.be/6jJUA_JSCyo)
 <br>
 _at Scale By the Bay 2019, November 2019, Oakland, CA._
