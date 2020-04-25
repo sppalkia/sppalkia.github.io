@@ -1,5 +1,11 @@
 ### Publications
 
+[Offload Annotations: Bringing Heterogeneous Computing to Existing Libraries and Workloads](/)
+<br>
+Gina Yuan, **Shoumik Palkar**, Deepak Narayanan, Matei Zaharia
+<br>
+_To appear in USENIX ATC 2020._
+
 [Willump: A Statistically-Aware End-to-end Optimizer for Machine Learning Inference](/)
 <br>
 Peter Kraft, Daniel Kang, Deepak Narayanan, **Shoumik Palkar**, Peter Bailis, and Matei Zaharia.
