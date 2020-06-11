@@ -1,12 +1,11 @@
-I am a Ph.D. student in the Computer Science department at Stanford University,
-advised by [Prof. Matei Zaharia](https://cs.stanford.edu/~matei/).  I am
-primarily affiliated with the [Stanford DAWN
-Lab](https://dawn.cs.stanford.edu). My research interests revolve around making
-data-driven systems fast, scalable, and secure.
+I am currently a software engineer at [Databricks](https://www.databricks.com),
+working on a new high performance execution engine for Spark SQL.
 
-I am graduating in Spring 2020 and joining
-[Databricks](https://www.databricks.com) as a software engineer, working on a
-new execution engine for Spark SQL. I recently defended my Ph.D. thesis: you
-can find the slides for my talk
+Before joining Databricks, I was a Ph.D. student in the Computer Science
+department at Stanford University, advised by [Prof. Matei
+Zaharia](https://cs.stanford.edu/~matei/). My dissertation work was on making
+interfaces for composing independently written software systems more efficient
+on modern hardware. You can find the slides for my Ph.D. defense talk
 [here](static/papers/shoumik-defense-slides.pdf) and a video recording
-[here](https://www.youtube.com/watch?v=qze_aB4dPDw).
+[here](https://www.youtube.com/watch?v=qze_aB4dPDw). The full dissertation is
+available [here](https://searchworks.stanford.edu/view/13595445).

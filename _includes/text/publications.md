@@ -56,6 +56,12 @@ In _SOSP 2015._
 
 ### Tech Reports
 
+[Interfaces for Efficient Software Composition on Modern Hardware](https://searchworks.stanford.edu/view/13595445)
+<br>
+Shoumik Palkar
+<br>
+_Ph.D. Dissertation._
+
 [Weld: Rethinking the Interface Between Data-Intensive Applications.](https://arxiv.org/pdf/1709.06416.pdf)
 <br>
 **Shoumik Palkar**, James Thomas, Deepak Narayanan, Anil Shanbhag, Holger Pirk, Malte Schwarzkopf, Saman Amarasinghe, Samuel Madden, and Matei Zaharia.
