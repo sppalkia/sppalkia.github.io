@@ -4,7 +4,7 @@
 <br>
 Gina Yuan, **Shoumik Palkar**, Deepak Narayanan, Matei Zaharia
 <br>
-_To appear in USENIX ATC 2020._
+_In USENIX ATC 2020._
 
 [Willump: A Statistically-Aware End-to-end Optimizer for Machine Learning Inference](/)
 <br>
