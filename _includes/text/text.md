@@ -1,5 +1,6 @@
-I am currently a software engineer at [Databricks](https://www.databricks.com),
-working on a new high performance execution engine for Spark SQL.
+I am currently a software engineer at [Databricks](https://www.databricks.com)
+working on [Photon](https://www.youtube.com/watch?v=o54YMz8zvCY), a new native
+vectorized execution engine for Spark SQL.
 
 Before joining Databricks, I was a Ph.D. student in the Computer Science
 department at Stanford University, advised by [Prof. Matei
