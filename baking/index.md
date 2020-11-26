@@ -126,6 +126,6 @@ proved it for too long.
 There are many good blogs with fantastic baking recipes. I've listed of my favorite ones below.
 
 * [Sally's Baking Addiction](https://sallysbakingaddiction.com/)
-* [A Breaducation](https://www.abreaducation.com/).
+* [A Breaducation](https://www.abreaducation.com/)
 * [Smitten Kitchen](https://www.smittenkitchen.com/)
 * [New York Times Cooking](https://cooking.nytimes.com/) (requires a subscription)
