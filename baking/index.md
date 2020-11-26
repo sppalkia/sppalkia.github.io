@@ -123,7 +123,7 @@ proved it for too long.
 
 ### Blogs and Recipes
 
-There are many good blogs with fantastic baking recipes. I've listed of my favorite ones below.
+There are many good blogs with fantastic baking recipes. I've listed some of my favorite ones below.
 
 * [Sally's Baking Addiction](https://sallysbakingaddiction.com/)
 * [A Breaducation](https://www.abreaducation.com/)
