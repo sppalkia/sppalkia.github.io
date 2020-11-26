@@ -1,4 +1,4 @@
-### Selected Projects
+### Selected Projects from Thesis Work
 
 * **Weld**, an interface for data analytics libraries that enables
 optimizations and fast code generation across libraries and frameworks such

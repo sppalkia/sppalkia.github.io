@@ -1,0 +1,12 @@
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 4px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  vertical-align: middle;
+}
+
+.row img {
+  max-width: 100%;
+}

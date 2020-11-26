@@ -1,5 +1,6 @@
 ---
 layout: default
+title: Shoumik Palkar
 ---
 
 
@@ -13,6 +14,8 @@ layout: default
 {% include text/talks.md %}
 <hr>
 {% include text/past.md %}
+<hr>
+{% include text/other.md %}
 <hr>
 
 ### Contact
