@@ -121,6 +121,16 @@ The first bread loaf I ever made. I thought it looked pretty good, but if I reme
 was very slightly underbaked and had a somewhat strange taste. I either didn't put enough salt or
 proved it for too long.
 
+## Classic Samosa
+
+<div class="row">
+  <img src="/static/images/baking/samosa.jpg">
+</div>
+
+A classic potatoes-and-onions samosa. Though not exactly a "bake," I'm adding it here since this was
+inspired by a challenge on _The Great British Baking Show_.
+
+
 ### Blogs and Recipes
 
 There are many good blogs with fantastic baking recipes. I've listed some of my favorite ones below.
