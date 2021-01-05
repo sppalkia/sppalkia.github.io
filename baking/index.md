@@ -8,6 +8,15 @@ enjoy baking breads, savory pastries, and candies. The photos below display some
 
 ---
 
+## Floral Buttercream Mocha Cake
+
+<div class="row">
+  <img src="/static/images/baking/flower-cake.jpg">
+</div>
+
+An espresso-infused chocolate cake with a floral vanilla buttercream frosting. One of my favorites
+so far!
+
 ## Vanilla Crème Brûlée
 
 <div class="row">
