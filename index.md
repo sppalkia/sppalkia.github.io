@@ -9,6 +9,8 @@ title: Shoumik Palkar
 {% include text/projects.md %}
 <hr>
 
+{% include text/service.md %}
+<hr>
 {% include text/publications.md %}
 <hr>
 {% include text/talks.md %}

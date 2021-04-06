@@ -8,6 +8,15 @@ enjoy baking breads, savory pastries, and candies. The photos below display some
 
 ---
 
+## Strawberry Cake
+
+<div class="row">
+  <img src="/static/images/baking/strawberry-cake.jpg">
+</div>
+
+A strawberry cake through-and-through: this is a white cake with strawberry purée, iced with a
+strawberry cream cheese frosting, and topped with fresh (you guessed it) strawberries.
+
 ## Floral Buttercream Mocha Cake
 
 <div class="row">
@@ -67,16 +76,6 @@ icing job I am most proud of.
 This has become the standard cake I make for any celebration involving my mother (birthday, Mother's
 day, etc.). The cake itself is baked with olive oil, which accents the chocolate flavor nicely.
 Based on [this recipe](https://smittenkitchen.com/2017/10/chocolate-olive-oil-cake-more-book-tour/).
-
-## Genoise with Strawberry Syrup
-
-<div class="row">
-  <img src="/static/images/baking/strawberry-cake.jpg">
-</div>
-
-My first attempt at making a sponge cake soaked with a strawberry-flavored syrup and frosted with
-strawberry-infused icing. It looked a little messy, but tasted great. The genoise sponge recipe is
-based on the one from _The Baking Bible_.
 
 ## Ginger Molasses Cookies
 
