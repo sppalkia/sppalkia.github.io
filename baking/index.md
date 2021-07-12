@@ -8,6 +8,16 @@ enjoy baking breads, savory pastries, and candies. The photos below display some
 
 ---
 
+## Coconut Cake
+
+<div class="row">
+  <img src="/static/images/baking/coconut-cake.jpeg">
+</div>
+
+A coconut cake with buttercream roses. The cake itself is made with coconut milk and shredded
+coconut, and the cream cheese frosting also has a splash of coconut flavor. Based on
+[this recipe](https://sallysbakingaddiction.com/coconut-cake/).
+
 ## Strawberry Cake
 
 <div class="row">
@@ -66,16 +76,6 @@ able to bring chocolate to my (remote) thesis defense. Based on
 A three-layer cake infused with hazelnut liquor and fresh hazelnut. The frosting is
 chocolate-hazelnut (from scratch; nutella would have been too sweet). Definitely the cake whose
 icing job I am most proud of.
-
-## Olive Oil Cake with Chocolate Ganache
-
-<div class="row">
-<img src="/static/images/baking/olive-oil-cake.jpg">
-</div>
-
-This has become the standard cake I make for any celebration involving my mother (birthday, Mother's
-day, etc.). The cake itself is baked with olive oil, which accents the chocolate flavor nicely.
-Based on [this recipe](https://smittenkitchen.com/2017/10/chocolate-olive-oil-cake-more-book-tour/).
 
 ## Ginger Molasses Cookies
 
