@@ -4,9 +4,19 @@ title: Baking
 ---
 
 I enjoy baking in my spare time. Though I have a slight bias for baking cookies and cakes, I also
-enjoy baking breads, savory pastries, and candies. The photos below display some attempts.
+enjoy baking breads, savory pastries, and candies. My wife [Paroma](https://www.paroma.xyz) is a
+frequent contributor/taste tester in these ventures!
 
 ---
+
+## French Macarons
+
+<div class="row">
+  <img src="/static/images/baking/macaron.jpeg">
+</div>
+
+French macarons with a coconut buttercream filling. This was my first time making a cookie based on
+a meringue, and I thought they turned out pretty well!
 
 ## Coconut Cake
 
