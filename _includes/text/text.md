@@ -1,5 +1,5 @@
 I am currently a software engineer at [Databricks](https://www.databricks.com).
-I work on [Photon](https://www.youtube.com/watch?v=o54YMz8zvCY), a new native
+I work on [Photon](https://www.databricks.com/product/photon), a new native
 vectorized execution engine for Spark SQL.
 
 Before joining Databricks, I was a Ph.D. student in the Computer Science
