@@ -3,19 +3,19 @@ layout: default
 title: Shoumik Palkar
 ---
 
-
 {% include text/text.md %}
 <hr>
-{% include text/projects.md %}
-<hr>
 
-{% include text/service.md %}
-<hr>
+
 {% include text/publications.md %}
+<hr>
+{% include text/service.md %}
 <hr>
 {% include text/talks.md %}
 <hr>
 {% include text/past.md %}
+<hr>
+{% include text/projects.md %}
 <hr>
 {% include text/other.md %}
 <hr>

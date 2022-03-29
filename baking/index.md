@@ -9,6 +9,24 @@ frequent contributor/taste tester in these ventures!
 
 ---
 
+## Kouign Amann
+
+<div class="row">
+  <img src="/static/images/baking/kouign-amann.jpeg">
+</div>
+
+Kouign Amann is a pastry made with a laminated dough, with sugar folded into the layers. Think of
+it as a caramelized croissant. It is one of my favorite French confections.
+
+## Sugar Cake
+
+<div class="row">
+  <img src="/static/images/baking/sugar-cake.jpeg">
+</div>
+
+A cake with three kinds of sugar: a moist sponge with burnt sugar syrup, a caramel sauce, and a spun
+sugar decoration on top. Surprisingly not as sweet as it sounds!
+
 ## French Macarons
 
 <div class="row">
@@ -16,7 +34,7 @@ frequent contributor/taste tester in these ventures!
 </div>
 
 French macarons with a coconut buttercream filling. This was my first time making a cookie based on
-a meringue, and I thought they turned out pretty well!
+a meringue.
 
 ## Coconut Cake
 
@@ -87,17 +105,6 @@ A three-layer cake infused with hazelnut liquor and fresh hazelnut. The frosting
 chocolate-hazelnut (from scratch; nutella would have been too sweet). Definitely the cake whose
 icing job I am most proud of.
 
-## Ginger Molasses Cookies
-
-<div class="row">
-  <img src="/static/images/baking/ginger-cookies.jpg">
-</div>
-
-Cookies that use molasses instead of lots of sugar, and have a heavy dose of fresh ginger. These
-cookies have a very "adult" flavor, and I usually make them for people who otherwise don't like
-sweets. Based on
-[this recipe](https://cooking.nytimes.com/recipes/1019806-chocolate-molasses-cookies).
-
 ## Mirror Glaze Cake
 
 <div class="row">
@@ -117,17 +124,6 @@ some gold food dust for extra effect.
 
 Red velvet cake pops for my younger cousin's birthday. The cake is a baked red velvet decimated into
 crumbs and squeezed into a ball. The outer layer is white chocolate.
-
-## Chocolate Coffee Cake with French Buttercream
-
-<div class="row">
-  <img src="/static/images/baking/choco-cake.jpg">
-</div>
-
-This was the first layered cake I ever made. The icing is a white chocolate caramel buttercream, and
-the cake is a standard chocolate cake with a healthy amount of brewed coffee to lift the flavor
-further. This cake is based on the _Chocolate FloRo Elegance with Caramel Buttercream_ from _The
-Baking Bible_.
 
 ## Bread Loaf
 

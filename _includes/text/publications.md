@@ -1,5 +1,11 @@
 ### Publications
 
+[Photon: A Fast Query Engine for Lakehouse Systems](static/papers/photon-sigmod22.pdf)
+<br>
+Alexander Behm, **Shoumik Palkar**, Utkarsh Agarwal, Timothy Armstrong, David Cashman, Ankur Dave, Todd Greenstein, Shant Hovsepian, Ryan Johnson, Arvind Sai Krishnan, Paul Leventis, Ala Luszczak, Prashanth Menon, Mostafa Mokhtar, Gene Pang, Sameer Paranjpye, Greg Rahn, Bart Samwel, Tom van Bussel, Herman van Hovell, Maryann Xue, Reynold Xin, Matei Zaharia
+<br>
+_In SIGMOD 2022 (to appear)._
+
 [Offload Annotations: Bringing Heterogeneous Computing to Existing Libraries and Workloads](https://www.usenix.org/system/files/atc20-yuan.pdf)
 <br>
 Gina Yuan, **Shoumik Palkar**, Deepak Narayanan, Matei Zaharia
