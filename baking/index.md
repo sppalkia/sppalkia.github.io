@@ -9,6 +9,15 @@ frequent contributor/taste tester in these ventures!
 
 ---
 
+## S'mores cupcake
+
+<div class="row">
+  <img src="/static/images/baking/smores-cupcake.jpg">
+</div>
+
+A chocolate cupcake with a graham cracker base and burnt marshmallow meringue frosting. A great
+excuse to use the blow torch!
+
 ## Kouign Amann
 
 <div class="row">
