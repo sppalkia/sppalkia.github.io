@@ -9,6 +9,15 @@ frequent contributor/taste tester in these ventures!
 
 ---
 
+## Summer Pistachio Cake
+
+<div class="row">
+  <img src="/static/images/baking/pistachio.jpg">
+</div>
+
+A pistachio and almond flavored cake with chocolate and vanilla buttercream, with summer-themed
+piping.
+
 ## S'mores cupcake
 
 <div class="row">
@@ -16,7 +25,7 @@ frequent contributor/taste tester in these ventures!
 </div>
 
 A chocolate cupcake with a graham cracker base and burnt marshmallow meringue frosting. A great
-excuse to use the blow torch!
+excuse to use the kitchen blow torch!
 
 ## Kouign Amann
 
